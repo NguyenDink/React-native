@@ -6,7 +6,6 @@ import { Ionicons } from "react-native-vector-icons";
 
 import StartPage from "./app/screens/StartPage";
 import LoginPage from "./app/screens/LoginPage";
-import HomePage from "./app/screens/HomePage";
 import RegisterPage from "./app/screens/RegisterPage";
 import MoreInfoPage from "./app/screens/MoreInfoPage";
 import ForgotPassWordPage from "./app/screens/ForgotPasswordPage";
@@ -16,6 +15,7 @@ import HomeTab from "./app/screens/Home/HomeTab";
 import JobConnectTab from "./app/screens/Home/JobConnectTab";
 import CV_ProfileTab from "./app/screens/Home/CV_ProfileTab";
 import NotificationTab from "./app/screens/Home/NotificationTab";
+import ChangePasswordScreen from "./app/screens/ChangePasswordScreen";
 
 const Stack = createStackNavigator();
 
@@ -60,10 +60,10 @@ export default function App() {
     return (
         <NavigationContainer>
             <Stack.Navigator
-                initialRouteName="Start"
+                initialRouteName="Home"
                 screenOptions={{
                     headerShown: false,
-                    gestureEnabled: true,
+                    gestureEnabled: false,
                     ...TransitionPresets.SlideFromRightIOS,
                 }}
             >
@@ -81,6 +81,11 @@ export default function App() {
                 />
                 <Stack.Screen name="Register" component={RegisterPage} />
                 <Stack.Screen name="MoreInfo" component={MoreInfoPage} />
+                <Stack.Screen
+                    name="ChangePassword"
+                    component={ChangePasswordScreen}
+                    options={{ headerShown: true, headerTitle: "Đổi mật khẩu", headerTitleAlign: "center" }}
+                />
                 <Stack.Screen name="Home" component={AppTabs} />
             </Stack.Navigator>
         </NavigationContainer>

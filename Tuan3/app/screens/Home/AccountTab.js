@@ -1,10 +1,13 @@
 import React from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
 
 export default function AccountTab({ route, navigation }) {
     return (
         <View style={styles.container}>
             <Text style={styles.title}>Tài khoản</Text>
+            <TouchableOpacity style={styles.button} onPress={() => navigation.navigate("ChangePassword")}>
+                <Text style={styles.buttonText}>Đổi mật khẩu</Text>
+            </TouchableOpacity>
         </View>
     );
 }
