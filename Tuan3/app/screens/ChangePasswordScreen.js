@@ -39,15 +39,35 @@ export default function ChangePasswordScreen({ navigation, route }) {
     };
 
     const handleResetPassword = async () => {
-        if (!passwordError && !newPasswordError && !confirmPasswordError) {
+        let isValid = true;
+
+        if (password.trim() === "") {
+            setPasswordError("Vui lòng nhập mật khẩu hiện tại");
+            isValid = false;
+        }
+        if (newPassword.trim() === "") {
+            setNewPasswordError("Vui lòng nhập mật khẩu mới");
+            isValid = false;
+        }
+        if (confirmPassword.trim() === "") {
+            setConfirmPasswordError("Vui lòng nhập lại mật khẩu mới");
+            isValid = false;
+        } else if (newPassword !== confirmPassword) {
+            setConfirmPasswordError("Nhập lại mật khẩu không trùng khớp");
+            isValid = false;
+        }
+
+        if (isValid) {
             try {
-                // Xử lý logic lưu mật khẩu
+                Alert.alert("Thành công", "Đổi mật khẩu thành công.");
             } catch (error) {
                 Alert.alert("Lỗi", "Đã xảy ra lỗi. Hãy thử lại.");
             }
-        } else {
-            Alert.alert("Lỗi", "Vui lòng kiểm tra lại các thông tin nhập.");
         }
+    };
+
+    const handleCancel = () => {
+        navigation.goBack();
     };
 
     return (
@@ -104,7 +124,7 @@ export default function ChangePasswordScreen({ navigation, route }) {
             </View>
 
             <View style={styles.buttonContainer}>
-                <TouchableOpacity style={styles.buttonLine}>
+                <TouchableOpacity style={styles.buttonLine} onPress={handleCancel}>
                     <Text style={styles.buttonLineText}>Hủy</Text>
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.button} onPress={handleResetPassword}>
