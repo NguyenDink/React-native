@@ -1,7 +1,8 @@
 import React, { useState } from "react";
-import { StyleSheet, Text, View, TouchableOpacity, Image } from "react-native";
+import { Text, View, TouchableOpacity, Image } from "react-native";
 import { launchImageLibrary } from "react-native-image-picker";
 import Icon from "react-native-vector-icons/Ionicons";
+import tailwind from "../../css/tailwind";
 
 export default function AccountTab({ route, navigation }) {
     const [avatar, setAvatar] = useState(
@@ -25,133 +26,51 @@ export default function AccountTab({ route, navigation }) {
     };
 
     return (
-        <View style={styles.container}>
-            <View style={styles.topBackground} />
+        <View className="flex-1 bg-gray-100">
+            {/* Background Section */}
+            <View className="bg-green-600 h-36 w-full absolute top-0 left-0 right-0 z-[-1]" />
 
-            <View style={styles.profileSection}>
-                <View style={styles.avatarContainer}>
-                    <Image source={{ uri: avatar }} style={styles.avatar} />
-                    <TouchableOpacity style={styles.editIcon} onPress={selectImage}>
+            {/* Profile Section */}
+            <View className="flex-row bg-white rounded-lg p-5 mx-5 mt-20 shadow-lg">
+                <View className="relative">
+                    <Image source={{ uri: avatar }} className="w-24 h-24 rounded-full border-2 border-green-500 mr-5" />
+                    <TouchableOpacity
+                        className="absolute right-0 bottom-0 bg-gray-600 rounded-full p-1 border-2 border-white"
+                        onPress={selectImage}
+                    >
                         <Icon name="camera-outline" size={20} color="#fff" />
                     </TouchableOpacity>
                 </View>
-                <View style={styles.profileDetails}>
-                    <Text style={styles.username}>Đinh Trung Nguyên</Text>
-                    <Text style={styles.email}>email@example.com</Text>
-                    <Text style={styles.isActive}>Chưa xác thực</Text>
+                <View className="flex-1">
+                    <Text className="text-lg font-bold text-gray-800 mb-1">Đinh Trung Nguyên</Text>
+                    <Text className="text-sm text-gray-600">email@example.com</Text>
+                    <Text className="text-sm font-bold text-gray-600 mt-2 ml-3">Chưa xác thực</Text>
                 </View>
             </View>
 
-            <View style={styles.optionsSection}>
-                <TouchableOpacity style={styles.option} onPress={() => navigation.navigate("PersonalInfo")}>
-                    <Text style={styles.optionText}>Thông tin cá nhân</Text>
-                </TouchableOpacity>
-
-                <TouchableOpacity style={styles.option} onPress={() => navigation.navigate("ChangePassword")}>
-                    <Text style={styles.optionText}>Đổi mật khẩu</Text>
+            {/* Options Section */}
+            <View className="px-5 mt-10">
+                <TouchableOpacity
+                    className="bg-white p-4 rounded-lg mb-4 shadow-md"
+                    onPress={() => navigation.navigate("PersonalInfo")}
+                >
+                    <Text className="text-lg font-medium text-gray-800">Thông tin cá nhân</Text>
                 </TouchableOpacity>
 
                 <TouchableOpacity
-                    style={[styles.option, { marginBottom: 0 }]}
+                    className="bg-white p-4 rounded-lg mb-4 shadow-md"
+                    onPress={() => navigation.navigate("ChangePassword")}
+                >
+                    <Text className="text-lg font-medium text-gray-800">Đổi mật khẩu</Text>
+                </TouchableOpacity>
+
+                <TouchableOpacity
+                    className="bg-white p-4 rounded-lg shadow-md"
                     onPress={() => navigation.navigate("Logout")}
                 >
-                    <Text style={[styles.optionText, { color: "#d9534f" }]}>Đăng xuất</Text>
+                    <Text className="text-lg font-medium text-red-600">Đăng xuất</Text>
                 </TouchableOpacity>
             </View>
         </View>
     );
 }
-
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: "#f4f4f4",
-    },
-    topBackground: {
-        backgroundColor: "#5fa75f",
-        height: 140,
-        width: "100%",
-        position: "absolute",
-        top: 0,
-        left: 0,
-        right: 0,
-        zIndex: -1,
-    },
-    profileSection: {
-        flexDirection: "row",
-        backgroundColor: "#ffffff",
-        borderRadius: 10,
-        padding: 20,
-        alignItems: "center",
-        marginHorizontal: 20,
-        marginTop: 80,
-        elevation: 5,
-        shadowColor: "#000",
-        shadowOpacity: 0.1,
-        shadowRadius: 10,
-        shadowOffset: { width: 0, height: 2 },
-    },
-    avatarContainer: {
-        position: "relative",
-    },
-    avatar: {
-        width: 90,
-        height: 90,
-        borderRadius: 50,
-        borderColor: "#6dcf5b",
-        borderWidth: 2,
-        marginRight: 20,
-    },
-    editIcon: {
-        position: "absolute",
-        right: 0,
-        bottom: 0,
-        backgroundColor: "#777",
-        borderRadius: 50,
-        padding: 5,
-        borderColor: "#fff",
-        borderWidth: 2,
-    },
-    profileDetails: {
-        flex: 1,
-    },
-    username: {
-        fontSize: 18,
-        fontWeight: "bold",
-        color: "#333",
-        marginBottom: 5,
-    },
-    email: {
-        fontSize: 14,
-        color: "#777",
-    },
-    isActive: {
-        fontSize: 14,
-        fontWeight: "bold",
-        color: "#777",
-        marginBottom: 5,
-        marginTop: 5,
-        marginLeft: 15,
-    },
-    optionsSection: {
-        paddingHorizontal: 20,
-        marginTop: 40,
-    },
-    option: {
-        backgroundColor: "#fff",
-        paddingVertical: 15,
-        paddingHorizontal: 20,
-        borderRadius: 10,
-        marginBottom: 15,
-        elevation: 2,
-        shadowColor: "#000",
-        shadowOpacity: 0.1,
-        shadowRadius: 5,
-        shadowOffset: { width: 0, height: 2 },
-    },
-    optionText: {
-        fontSize: 16,
-        fontWeight: "500",
-        color: "#333",
-    },
-});
