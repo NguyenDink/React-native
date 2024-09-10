@@ -71,22 +71,22 @@ export default function ChangePasswordScreen({ navigation, route }) {
     };
 
     return (
-        <View style={styles.container}>
-            <View style={styles.form}>
-                <Text style={styles.text}>Email đăng nhập</Text>
-                <View style={[styles.inputContainer, styles.inputDisable]}>
+        <View className="flex-1 bg-[#f1f4f9] justify-between">
+            <View className="bg-white px-3 py-5 mx-4 my-4">
+                <Text className="text-lg font-bold text-[#333] mb-2">Email đăng nhập</Text>
+                <View className="flex-row items-center w-full h-10 rounded-md mb-2 px-4 bg-[#f1f1f1] border border-[#e2e0e0]">
                     <TextInput
-                        style={styles.input}
+                        className="flex-1 h-full text-base"
                         placeholder="abc@gmail.com"
                         placeholderTextColor="#a0a0a0"
                         editable={false}
                     />
                 </View>
 
-                <Text style={styles.text}>Mật khẩu hiện tại</Text>
-                <View style={styles.inputContainer}>
+                <Text className="text-lg font-bold text-[#333] mb-2">Mật khẩu hiện tại</Text>
+                <View className="flex-row items-center w-full h-10 rounded-md mb-2 px-4 bg-white border border-[#e2e0e0]">
                     <TextInput
-                        style={styles.input}
+                        className="flex-1 h-full text-base"
                         placeholder="Mật khẩu hiện tại"
                         secureTextEntry={true}
                         placeholderTextColor="#a0a0a0"
@@ -94,12 +94,12 @@ export default function ChangePasswordScreen({ navigation, route }) {
                         onChangeText={validatePassword}
                     />
                 </View>
-                {passwordError ? <Text style={styles.errorText}>{passwordError}</Text> : null}
+                {passwordError ? <Text className="text-red-500 mb-2 text-sm">{passwordError}</Text> : null}
 
-                <Text style={styles.text}>Mật khẩu mới</Text>
-                <View style={styles.inputContainer}>
+                <Text className="text-lg font-bold text-[#333] mb-2">Mật khẩu mới</Text>
+                <View className="flex-row items-center w-full h-10 rounded-md mb-2 px-4 bg-white border border-[#e2e0e0]">
                     <TextInput
-                        style={styles.input}
+                        className="flex-1 h-full text-base"
                         placeholder="Mật khẩu mới"
                         secureTextEntry={true}
                         placeholderTextColor="#a0a0a0"
@@ -107,12 +107,12 @@ export default function ChangePasswordScreen({ navigation, route }) {
                         onChangeText={validateNewPassword}
                     />
                 </View>
-                {newPasswordError ? <Text style={styles.errorText}>{newPasswordError}</Text> : null}
+                {newPasswordError ? <Text className="text-red-500 mb-2 text-sm">{newPasswordError}</Text> : null}
 
-                <Text style={styles.text}>Nhập lại mật khẩu mới</Text>
-                <View style={styles.inputContainer}>
+                <Text className="text-lg font-bold text-[#333] mb-2">Nhập lại mật khẩu mới</Text>
+                <View className="flex-row items-center w-full h-10 rounded-md mb-2 px-4 bg-white border border-[#e2e0e0]">
                     <TextInput
-                        style={styles.input}
+                        className="flex-1 h-full text-base"
                         placeholder="Nhập lại mật khẩu mới"
                         secureTextEntry={true}
                         placeholderTextColor="#a0a0a0"
@@ -120,99 +120,22 @@ export default function ChangePasswordScreen({ navigation, route }) {
                         onChangeText={validateConfirmPassword}
                     />
                 </View>
-                {confirmPasswordError ? <Text style={styles.errorText}>{confirmPasswordError}</Text> : null}
+                {confirmPasswordError ? (
+                    <Text className="text-red-500 mb-2 text-sm">{confirmPasswordError}</Text>
+                ) : null}
             </View>
 
-            <View style={styles.buttonContainer}>
-                <TouchableOpacity style={styles.buttonLine} onPress={handleCancel}>
-                    <Text style={styles.buttonLineText}>Hủy</Text>
+            <View className="flex-row justify-between bg-white py-3 px-2">
+                <TouchableOpacity
+                    className="border border-[#509b43] rounded-full py-3 px-4 w-[49%]"
+                    onPress={handleCancel}
+                >
+                    <Text className="text-[#509b43] text-center font-bold text-base">Hủy</Text>
                 </TouchableOpacity>
-                <TouchableOpacity style={styles.button} onPress={handleResetPassword}>
-                    <Text style={styles.buttonText}>Lưu</Text>
+                <TouchableOpacity className="bg-[#509b43] rounded-full py-3 px-4 w-[49%]" onPress={handleResetPassword}>
+                    <Text className="text-white text-center font-bold text-base">Lưu</Text>
                 </TouchableOpacity>
             </View>
         </View>
     );
 }
-
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: "#f1f4f9",
-        alignItems: "flex-start",
-        justifyContent: "space-between",
-    },
-    form: {
-        backgroundColor: "#ffffff",
-        paddingHorizontal: 10,
-        paddingVertical: 20,
-        margin: 18,
-    },
-    text: {
-        fontSize: 16,
-        fontWeight: "bold",
-        color: "#333",
-        marginBottom: 10,
-    },
-    errorText: {
-        color: "red",
-        marginBottom: 10,
-        fontSize: 14,
-    },
-    inputContainer: {
-        flexDirection: "row",
-        alignItems: "center",
-        width: "100%",
-        height: 40,
-        borderRadius: 4,
-        marginBottom: 10,
-        paddingHorizontal: 15,
-        backgroundColor: "#ffffff",
-        borderWidth: 1,
-        borderColor: "#e2e0e0",
-    },
-    input: {
-        flex: 1,
-        height: "100%",
-        fontSize: 16,
-    },
-    inputDisable: {
-        backgroundColor: "#f1f1f1",
-    },
-    buttonContainer: {
-        backgroundColor: "#ffffff",
-        flexDirection: "row",
-        justifyContent: "space-between",
-        width: "100%",
-        paddingHorizontal: 10,
-        paddingVertical: 12,
-    },
-    button: {
-        backgroundColor: "#509b43",
-        borderRadius: 50,
-        paddingVertical: 12,
-        paddingHorizontal: 20,
-        width: "49%",
-        alignItems: "center",
-    },
-    buttonText: {
-        color: "#ffffff",
-        fontSize: 16,
-        fontWeight: "bold",
-    },
-    buttonLine: {
-        backgroundColor: "#ffffff",
-        borderWidth: 1,
-        borderColor: "#509b43",
-        borderRadius: 50,
-        paddingVertical: 12,
-        paddingHorizontal: 20,
-        width: "49%",
-        alignItems: "center",
-    },
-    buttonLineText: {
-        color: "#509b43",
-        fontSize: 16,
-        fontWeight: "bold",
-    },
-});
