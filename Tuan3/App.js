@@ -16,6 +16,7 @@ import JobConnectTab from "./app/screens/Home/JobConnectTab";
 import CV_ProfileTab from "./app/screens/Home/CV_ProfileTab";
 import NotificationTab from "./app/screens/Home/NotificationTab";
 import ChangePasswordScreen from "./app/screens/ChangePasswordScreen";
+import PersonalInfoScreen from "./app/screens/PersonalInfoScreen";
 
 const Stack = createStackNavigator();
 
@@ -85,6 +86,11 @@ export default function App() {
                     name="ChangePassword"
                     component={ChangePasswordScreen}
                     options={{ headerShown: true, headerTitle: "Đổi mật khẩu", headerTitleAlign: "center" }}
+                />
+                <Stack.Screen
+                    name="PersonalInfo"
+                    component={PersonalInfoScreen}
+                    options={{ headerShown: true, headerTitle: "Thông tin tài khoản", headerTitleAlign: "center" }}
                 />
                 <Stack.Screen name="Home" component={AppTabs} />
             </Stack.Navigator>
