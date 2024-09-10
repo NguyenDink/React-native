@@ -27,19 +27,19 @@ function AppTabs() {
         <Tab.Navigator
             screenOptions={({ route }) => ({
                 headerShown: false,
-                tabBarIcon: ({ color, size }) => {
+                tabBarIcon: ({ focused, color, size }) => {
                     let iconName;
 
                     if (route.name === "HomeTab") {
-                        iconName = "home-outline";
+                        iconName = focused ? "home" : "home-outline";
                     } else if (route.name === "CV_ProfileTab") {
-                        iconName = "document-outline";
+                        iconName = focused ? "document" : "document-outline";
                     } else if (route.name === "JobConnectTab") {
-                        iconName = "chatbox-ellipses-outline";
+                        iconName = focused ? "chatbox-ellipses" : "chatbox-ellipses-outline";
                     } else if (route.name === "NotificationScreen") {
-                        iconName = "notifications-outline";
+                        iconName = focused ? "notifications" : "notifications-outline";
                     } else if (route.name === "AccountTab") {
-                        iconName = "person-outline";
+                        iconName = focused ? "person" : "person-outline";
                     }
 
                     return <Ionicons name={iconName} size={size} color={color} />;
