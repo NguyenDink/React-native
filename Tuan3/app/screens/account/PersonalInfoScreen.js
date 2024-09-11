@@ -1,14 +1,13 @@
 import React, { useState } from "react";
 import { Text, TextInput, View, TouchableOpacity, Alert } from "react-native";
 
-export default function PersonalInfoScreen({ navigation }) {
-    const [fullName, setFullName] = useState("Đinh Trung Nguyên");
+export default function PersonalInfoScreen({ route, navigation }) {
+    const [fullName, setFullName] = useState(route.params.user.fullName);
     const [fullNameError, setFullNameError] = useState("");
-    const [email, setEmail] = useState("21110259@student.hcmute.edu.vn");
 
     const validateFullName = (value) => {
         if (value.trim() === "") {
-            setFullNameError("Tên người dùng không được để trống");
+            setFullNameError("Họ và tên không được để trống");
         } else {
             setFullNameError("");
         }
@@ -17,7 +16,7 @@ export default function PersonalInfoScreen({ navigation }) {
 
     const handleSave = () => {
         if (fullName.trim() === "") {
-            setFullNameError("Tên người dùng không được để trống");
+            setFullNameError("Họ và tên không được để trống");
         } else {
             setFullNameError("");
 
@@ -44,12 +43,12 @@ export default function PersonalInfoScreen({ navigation }) {
                         className="text-base text-gray-700"
                         placeholder="Email"
                         placeholderTextColor="#a0a0a0"
-                        value={email}
+                        value={route.params.user.email}
                         editable={false}
                     />
                 </View>
 
-                <Text className="text-base font-bold mb-2">Tên người dùng</Text>
+                <Text className="text-base font-bold mb-2">Họ và tên</Text>
                 <View className="bg-white rounded-lg px-4 py-3 mb-4">
                     <TextInput
                         className="text-base text-gray-700"
