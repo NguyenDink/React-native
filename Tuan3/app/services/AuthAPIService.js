@@ -1,4 +1,4 @@
-import AxiosClient from "./AxiosClient";
+import AxiosClient from "../api/AxiosClient";
 
 const postRequest = async (url, data, headers) => {
     try {
@@ -26,29 +26,32 @@ export const register = async (email, fullName, password) => {
     return postRequest("auth/register", data);
 };
 
-export const forgotPassword = async (email) => {
+export const sendOtp = async (email) => {
     const data = { email };
-    return postRequest("auth/forgot-password", data, {
-        headers: {
-            "Content-Type": "multipart/form-data",
-        },
-    });
+    return postRequest("auth/send-otp", data);
 };
 
 export const validateOtp = async (email, otp) => {
     const data = { email, otp };
-    return postRequest("auth/validate-otp", data, {
-        headers: {
-            "Content-Type": "multipart/form-data",
-        },
-    });
+    return postRequest("auth/validate-otp", data);
 };
 
 export const resetPassword = async (email, newPassword) => {
     const data = { email, newPassword };
-    return postRequest("auth/reset-password", data, {
-        headers: {
-            "Content-Type": "multipart/form-data",
-        },
-    });
+    return postRequest("auth/reset-password", data);
+};
+
+export const activate = async (token, otp) => {
+    const data = { token, otp };
+    return postRequest("auth/activate", data);
+};
+
+export const introspect = async (token) => {
+    const data = { token };
+    return postRequest("auth/introspect", data);
+};
+
+export const logout = async (token) => {
+    const data = { token };
+    return postRequest("auth/logout", data);
 };
