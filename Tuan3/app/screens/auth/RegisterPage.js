@@ -1,40 +1,48 @@
 import React, { useState } from "react";
 import { Alert, StyleSheet, Text, TextInput, TouchableOpacity, View, Image, Switch } from "react-native";
-import { login } from "../api/AuthAPIService";
-import logo from "../assets/logo.jpg";
-import iclock from "../assets/lock-alt-regular-24.png";
-import icmail from "../assets/envelope-regular-24.png";
-import iceye from "../assets/low-vision-regular-24.png";
+import { register } from "../../services/AuthAPIService";
+import logo from "../../assets/logo.jpg";
+import iclock from "../../assets/lock-alt-regular-24.png";
+import icmail from "../../assets/envelope-regular-24.png";
+import iceye from "../../assets/low-vision-regular-24.png";
+import icuser from "../../assets/user-regular-24.png";
 
-export default function LoginPage({ navigation }) {
+export default function RegisterPage({ navigation }) {
     const [email, setEmail] = useState("");
+    const [fullName, setFullName] = useState("");
     const [password, setPassword] = useState("");
-    const [isChecked, setIsChecked] = useState(false);
+    const [confirmPassword, setConfirmPassword] = useState("");
     const [showPassword, setShowPassword] = useState(false);
+    const [showConfirmPass, setShowConfirmPass] = useState(false);
+    const [isChecked, setIsChecked] = useState(false);
 
-    const handleLogin = async () => {
+    const handleRegister = async () => {
+        if (!email || !password || !confirmPassword) {
+            Alert.alert("Lỗi", "Vui lòng điền đầy đủ thông tin");
+            return;
+        }
+
+        if (password !== confirmPassword) {
+            Alert.alert("Lỗi", "Mật khẩu không trùng khớp");
+            return;
+        }
+
         if (!isChecked) {
             Alert.alert("Lỗi", "Vui lòng đồng ý với điều khoản dịch vụ và chính sách bảo mật để tiếp tục.");
             return;
         }
-        try {
-            const response = await login(email, password);
 
-            if (response.success) {
-                setEmail("");
-                setPassword("");
-                navigation.navigate("Home", {
-                    fullName: response.result.fullName || "",
-                    email: response.result.email || "",
-                    gender: response.result.gender || "",
-                    dob: response.result.dob || "",
-                    phoneNumber: response.result.phoneNumber || "",
-                });
+        try {
+            const data = await register(email, fullName, password);
+
+            if (data.success) {
+                Alert.alert("Đăng ký thành công", data.message);
+                navigation.navigate("Login");
             } else {
-                Alert.alert("Đăng nhập không thành công", response.message);
+                Alert.alert("Đăng ký không thành công", data.message);
             }
         } catch (error) {
-            Alert.alert("Đăng nhập không thành công", "Đã xảy ra lỗi khi đăng nhập. Hãy thử lại.");
+            Alert.alert("Đăng ký không thành công", "Đã xảy ra lỗi khi đăng ký. Hãy thử lại.");
         }
     };
 
@@ -43,7 +51,18 @@ export default function LoginPage({ navigation }) {
             <Image source={logo} style={styles.image} />
             <Text style={styles.description}>Chào mừng bạn đến với qnspJob</Text>
 
-            <Text style={styles.title}>Đăng nhập</Text>
+            <Text style={styles.title}>Đăng ký tài khoản</Text>
+
+            <View style={styles.inputContainer}>
+                <Image source={icuser} style={[styles.icon, styles.iconFaded]} />
+                <TextInput
+                    style={styles.input}
+                    placeholder="Họ và tên"
+                    placeholderTextColor="#a0a0a0"
+                    value={fullName}
+                    onChangeText={setFullName}
+                />
+            </View>
 
             <View style={styles.inputContainer}>
                 <Image source={icmail} style={[styles.icon, styles.iconFaded]} />
@@ -71,16 +90,20 @@ export default function LoginPage({ navigation }) {
                 </TouchableOpacity>
             </View>
 
-            <TouchableOpacity
-                style={styles.forgotPasswordContainer}
-                onPress={() => navigation.navigate("ForgotPassWord")}
-            >
-                <Text style={styles.link}>Quên mật khẩu?</Text>
-            </TouchableOpacity>
-
-            <TouchableOpacity style={styles.button} onPress={handleLogin}>
-                <Text style={styles.buttonText}>Đăng nhập</Text>
-            </TouchableOpacity>
+            <View style={styles.inputContainer}>
+                <Image source={iclock} style={[styles.icon, styles.iconFaded]} />
+                <TextInput
+                    style={styles.input}
+                    placeholder="Nhập lại mật khẩu"
+                    secureTextEntry={!showConfirmPass}
+                    placeholderTextColor="#a0a0a0"
+                    value={confirmPassword}
+                    onChangeText={setConfirmPassword}
+                />
+                <TouchableOpacity onPress={() => setShowConfirmPass(!showConfirmPass)}>
+                    <Image source={iceye} style={[styles.icon, styles.iconFaded]} />
+                </TouchableOpacity>
+            </View>
 
             <View style={styles.switchContainer}>
                 <Switch
@@ -90,20 +113,20 @@ export default function LoginPage({ navigation }) {
                     thumbColor="#ffffff"
                 />
                 <Text style={styles.switchText}>
-                    Bằng việc đăng nhập, tôi đã đọc và đồng ý với{" "}
-                    <Text style={styles.switchTextLink}>điều khoản dịch vụ</Text> và{" "}
+                    Tôi đã đọc và đồng ý với <Text style={styles.switchTextLink}>điều khoản dịch vụ</Text> và{" "}
                     <Text style={styles.switchTextLink}>chính sách bảo mật</Text> của qnspJob.
                 </Text>
             </View>
 
-            <View style={styles.footer}>
+            <TouchableOpacity style={styles.button} onPress={handleRegister}>
+                <Text style={styles.buttonText}>Đăng ký</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity style={styles.footer} onPress={() => navigation.navigate("Login")}>
                 <Text style={styles.text}>
-                    Bạn chưa có tài khoản?{" "}
-                    <Text style={styles.link} onPress={() => navigation.navigate("Register")}>
-                        Đăng ký ngay
-                    </Text>
+                    Bạn đã có tài khoản? <Text style={styles.link}>Đăng nhập ngay</Text>
                 </Text>
-            </View>
+            </TouchableOpacity>
 
             <View style={styles.hr} />
         </View>
@@ -159,16 +182,6 @@ const styles = StyleSheet.create({
         height: "100%",
         fontSize: 16,
     },
-    forgotPasswordContainer: {
-        alignSelf: "flex-end",
-        marginBottom: 32,
-    },
-    link: {
-        color: "#509b43",
-        textAlign: "right",
-        fontSize: 14,
-        fontWeight: "bold",
-    },
     button: {
         backgroundColor: "#509b43",
         width: "100%",
@@ -185,7 +198,7 @@ const styles = StyleSheet.create({
     switchContainer: {
         flexDirection: "row",
         alignItems: "center",
-        marginBottom: 60,
+        marginBottom: 16,
         paddingHorizontal: 24,
     },
     switchText: {
@@ -198,6 +211,12 @@ const styles = StyleSheet.create({
         color: "#333",
         textAlign: "center",
         fontSize: 14,
+    },
+    link: {
+        color: "#509b43",
+        textAlign: "right",
+        fontSize: 14,
+        fontWeight: "bold",
     },
     footer: {
         alignItems: "center",

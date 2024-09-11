@@ -1,7 +1,8 @@
 import React, { useState } from "react";
-import { forgotPassword, validateOtp } from "../api/AuthAPIService";
+import { forgotPassword, validateOtp } from "../../services/AuthAPIService";
 import { Alert, StyleSheet, Text, TextInput, TouchableOpacity, View, Image, ActivityIndicator } from "react-native";
-import icmail from "../assets/envelope-regular-24.png";
+import icmail from "../../assets/envelope-regular-24.png";
+import Toast from "react-native-toast-message";
 
 export default function ForgotPassWordPage({ navigation }) {
     const [email, setEmail] = useState("");
@@ -9,6 +10,18 @@ export default function ForgotPassWordPage({ navigation }) {
     const [otpSent, setOtpSent] = useState(false);
     const [otp, setOtp] = useState("");
     const [loading, setLoading] = useState(false);
+
+    const showToast = (type, text1, text2) => {
+        Toast.show({
+            type: type,
+            text1: text1,
+            text2: text2,
+            position: "top",
+            visibilityTime: 3000,
+            text1Style: { fontSize: 16, fontWeight: "bold" },
+            text2Style: { fontSize: 12 },
+        });
+    };
 
     const handleResetPassword = async () => {
         setLoading(true);
@@ -22,16 +35,16 @@ export default function ForgotPassWordPage({ navigation }) {
             setEmailError("");
         }
         try {
-            const response = await forgotPassword(email);
+            const data = await forgotPassword(email);
 
-            if (response.success) {
-                Alert.alert("Thành công", response.message);
+            if (data.success) {
+                showToast("success", "Thành công", data.message);
                 setOtpSent(true);
             } else {
-                Alert.alert("Lỗi", response.message);
+                showToast("error", "Lỗi", data.message);
             }
         } catch (error) {
-            Alert.alert("Lỗi", "Đã xảy ra lỗi. Hãy thử lại.");
+            showToast("error", "Lỗi", "Có lỗi xảy ra. Xin hãy thử lại.");
         } finally {
             setLoading(false);
         }
@@ -40,16 +53,16 @@ export default function ForgotPassWordPage({ navigation }) {
     const handleConfirmOTP = async () => {
         setLoading(true);
         try {
-            const response = await validateOtp(email, otp);
+            const data = await validateOtp(email, otp);
 
-            if (response.success) {
-                Alert.alert("Thành công", response.message);
+            if (data.success) {
+                showToast("success", "Thành công", data.message);
                 navigation.navigate("ResetPassWord", { email: email });
             } else {
-                Alert.alert("Lỗi", response.message);
+                showToast("error", "Lỗi", data.message);
             }
         } catch (error) {
-            Alert.alert("Lỗi", "Đã xảy ra lỗi. Hãy thử lại.");
+            showToast("error", "Lỗi", "Có lỗi xảy ra. Xin hãy thử lại.");
         } finally {
             setLoading(false);
         }
@@ -91,7 +104,7 @@ export default function ForgotPassWordPage({ navigation }) {
             </View>
 
             {loading ? (
-                <ActivityIndicator size="large" color="#0000ff" style={{ marginBottom: 15 }} />
+                <ActivityIndicator size="large" color="#0000ff" style={{ marginBottom: 15, alignItems: "center" }} />
             ) : (
                 <>
                     {otpSent ? (

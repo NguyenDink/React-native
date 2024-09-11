@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { StyleSheet, Text, TextInput, View, Alert, TouchableOpacity, Image } from "react-native";
-import { resetPassword } from "../api/AuthAPIService";
-import iceye from "../assets/low-vision-regular-24.png";
-import iclock from "../assets/lock-alt-regular-24.png";
+import { resetPassword } from "../../services/AuthAPIService";
+import iceye from "../../assets/low-vision-regular-24.png";
+import iclock from "../../assets/lock-alt-regular-24.png";
 
 export default function ResetPassWordPage({ navigation, route }) {
     const { email } = route.params;
@@ -22,13 +22,13 @@ export default function ResetPassWordPage({ navigation, route }) {
             return;
         }
         try {
-            const response = await resetPassword(email, newPassword);
+            const data = await resetPassword(email, newPassword);
 
-            if (response.success) {
-                Alert.alert("Thành công", response.message);
+            if (data.success) {
+                Alert.alert("Thành công", data.message);
                 navigation.navigate("Login");
             } else {
-                Alert.alert("Lỗi", response.message);
+                Alert.alert("Lỗi", data.message);
             }
         } catch (error) {
             Alert.alert("Lỗi", "Đã xảy ra lỗi. Hãy thử lại.");
