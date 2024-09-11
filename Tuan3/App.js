@@ -4,19 +4,20 @@ import { createStackNavigator, TransitionPresets } from "@react-navigation/stack
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { Ionicons } from "react-native-vector-icons";
 
-import StartPage from "./app/screens/StartPage";
-import LoginPage from "./app/screens/LoginPage";
-import RegisterPage from "./app/screens/RegisterPage";
-import MoreInfoPage from "./app/screens/MoreInfoPage";
-import ForgotPassWordPage from "./app/screens/ForgotPasswordPage";
-import ResetPassWordPage from "./app/screens/ResetPassWordPage";
+import Intro from "./app/screens/intro/Intro";
+import StartPage from "./app/screens/intro/StartPage";
+import LoginPage from "./app/screens/auth/LoginPage";
+import RegisterPage from "./app/screens/auth/RegisterPage";
+import ForgotPassWordPage from "./app/screens/auth/ForgotPasswordPage";
+import ResetPassWordPage from "./app/screens/auth/ResetPassWordPage";
 import AccountTab from "./app/screens/Home/AccountTab";
 import HomeTab from "./app/screens/Home/HomeTab";
 import JobConnectTab from "./app/screens/Home/JobConnectTab";
 import CV_ProfileTab from "./app/screens/Home/CV_ProfileTab";
 import NotificationTab from "./app/screens/Home/NotificationTab";
-import ChangePasswordScreen from "./app/screens/ChangePasswordScreen";
-import PersonalInfoScreen from "./app/screens/PersonalInfoScreen";
+import ChangePasswordScreen from "./app/screens/account/ChangePasswordScreen";
+import PersonalInfoScreen from "./app/screens/account/PersonalInfoScreen";
+import ActivateAccount from "./app/screens/account/ActivateAccount";
 
 const Stack = createStackNavigator();
 
@@ -61,13 +62,14 @@ export default function App() {
     return (
         <NavigationContainer>
             <Stack.Navigator
-                initialRouteName="Home"
+                initialRouteName="Intro"
                 screenOptions={{
                     headerShown: false,
                     gestureEnabled: false,
                     ...TransitionPresets.SlideFromRightIOS,
                 }}
             >
+                <Stack.Screen name="Intro" component={Intro} />
                 <Stack.Screen name="Start" component={StartPage} />
                 <Stack.Screen name="Login" component={LoginPage} />
                 <Stack.Screen
@@ -81,7 +83,6 @@ export default function App() {
                     options={{ headerShown: true, headerTitle: "" }}
                 />
                 <Stack.Screen name="Register" component={RegisterPage} />
-                <Stack.Screen name="MoreInfo" component={MoreInfoPage} />
                 <Stack.Screen
                     name="ChangePassword"
                     component={ChangePasswordScreen}
@@ -92,6 +93,7 @@ export default function App() {
                     component={PersonalInfoScreen}
                     options={{ headerShown: true, headerTitle: "Thông tin tài khoản", headerTitleAlign: "center" }}
                 />
+                <Stack.Screen name="ActivateAccount" component={ActivateAccount} />
                 <Stack.Screen name="Home" component={AppTabs} />
             </Stack.Navigator>
         </NavigationContainer>
