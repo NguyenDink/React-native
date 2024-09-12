@@ -1,8 +1,8 @@
 import React, { useState } from "react";
-import { forgotPassword, validateOtp } from "../../services/AuthAPIService";
-import { Alert, StyleSheet, Text, TextInput, TouchableOpacity, View, Image, ActivityIndicator } from "react-native";
-import icmail from "../../assets/envelope-regular-24.png";
+import { Alert, ActivityIndicator, Image, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 import Toast from "react-native-toast-message";
+import icmail from "../../assets/envelope-regular-24.png";
+import { sendOtp, validateOtp } from "../../services/AuthAPIService";
 
 export default function ForgotPassWordPage({ navigation }) {
     const [email, setEmail] = useState("");
@@ -35,7 +35,7 @@ export default function ForgotPassWordPage({ navigation }) {
             setEmailError("");
         }
         try {
-            const data = await forgotPassword(email);
+            const data = await sendOtp(email);
 
             if (data.success) {
                 showToast("success", "Thành công", data.message);
@@ -90,21 +90,31 @@ export default function ForgotPassWordPage({ navigation }) {
                     />
                 </View>
                 {emailError ? <Text style={styles.errorText}>{emailError}</Text> : null}
-                {otpSent && (
+            </View>
+            {otpSent && (
+                <View>
+                    <Text style={styles.description}>
+                        Chúng tôi đã gửi mã xác nhận tới địa chỉ <Text style={styles.bold}>{email}</Text>. Vui lòng kiểm
+                        tra hòm thư hoặc hòm thư spam để lấy mã và nhập vào bên dưới
+                    </Text>
                     <View style={styles.inputContainer}>
                         <TextInput
                             style={styles.input}
-                            placeholder="Nhập mã OTP được gửi đến email của bạn."
+                            placeholder="Mã xác nhận"
                             value={otp}
                             onChangeText={setOtp}
                             keyboardType="numeric"
                         />
                     </View>
-                )}
-            </View>
+                    <Text style={styles.noteText}>
+                        Mã xác nhận hết hạn sau 5 phút kể từ khi bạn nhận được mã.{" "}
+                        <Text style={styles.bold}>Gửi lại mã.</Text>
+                    </Text>
+                </View>
+            )}
 
             {loading ? (
-                <ActivityIndicator size="large" color="#0000ff" style={{ marginBottom: 15, alignItems: "center" }} />
+                <ActivityIndicator size="large" color="#0000ff" style={{ marginBottom: 1 }} />
             ) : (
                 <>
                     {otpSent ? (
@@ -186,5 +196,12 @@ const styles = StyleSheet.create({
     buttonText: {
         color: "#ffffff",
         fontSize: 18,
+    },
+    bold: {
+        fontWeight: "bold",
+    },
+    noteText: {
+        color: "#a0a0a0",
+        textAlign: "center",
     },
 });

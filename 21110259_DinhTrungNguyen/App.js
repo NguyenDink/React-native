@@ -3,6 +3,7 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator, TransitionPresets } from "@react-navigation/stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { Ionicons } from "react-native-vector-icons";
+import Toast from "react-native-toast-message";
 
 import Intro from "./app/screens/intro/Intro";
 import StartPage from "./app/screens/intro/StartPage";
@@ -96,6 +97,7 @@ export default function App() {
                 <Stack.Screen name="ActivateAccount" component={ActivateAccount} />
                 <Stack.Screen name="Home" component={AppTabs} />
             </Stack.Navigator>
+            <Toast />
         </NavigationContainer>
     );
 }
