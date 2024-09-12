@@ -16,7 +16,7 @@ Danh sách các repo chứa bài tập theo từng tuần:
 
 ### Bài tập tuần 1 - 22/08/2024
 
--   [Bài tập 01: Cài đặt môi trường lập trình](https://github.com/nguyenkhanhquy/baitap01-22-08-2024)
+-   [Bài tập 01: Cài đặt môi trường lập trình](https://github.com/NguyenDink/LTDDNC-Tuan1)
 
 Yêu cầu:
 
@@ -25,7 +25,7 @@ Yêu cầu:
 
 ### Bài tập tuần 2 - 29/08/2024
 
--   [Bài tập 02: Chức năng Register, Login, Forget Password](https://github.com/nguyenkhanhquy/baitap02-29-08-2024)
+-   [Bài tập 02: Chức năng Register, Login, Forget Password](https://github.com/NguyenDink/LTDDNC-Tuan2)
 
 Yêu cầu:
 
@@ -35,7 +35,7 @@ Yêu cầu:
 
 ### Bài tập tuần 3 - 05/09/2024
 
--   [Bài tập A03: Xây dựng trang chủ của ứng dụng](https://github.com/nguyenkhanhquy/react-native/tree/main/21110282_NguyenKhanhQuy)
+-   [Bài tập A03: Xây dựng trang chủ của ứng dụng](https://github.com/NguyenDink/React-native/tree/main/21110259_DinhTrungNguyen)
 
 Yêu cầu:
 
@@ -45,7 +45,7 @@ Yêu cầu:
 
 ### Bài tập tuần 4 - 12/09/2024
 
--   [Bài tập A04: Chức năng profile, tìm kiếm, chi tiết](https://github.com/nguyenkhanhquy/react-native/tree/main/21110282_NguyenKhanhQuy)
+-   [Bài tập A04: Chức năng profile, tìm kiếm, chi tiết](https://github.com/NguyenDink/React-native/tree/main/21110259_DinhTrungNguyen)
 
 Yêu cầu:
 
