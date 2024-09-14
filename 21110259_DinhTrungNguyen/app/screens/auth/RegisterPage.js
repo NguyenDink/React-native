@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Alert, StyleSheet, Text, TextInput, TouchableOpacity, View, Image, Switch } from "react-native";
 import { register } from "../../services/AuthAPIService";
-import logo from "../../assets/logo.jpg";
+import logo from "../../assets/logo.png";
 import iclock from "../../assets/lock-alt-regular-24.png";
 import icmail from "../../assets/envelope-regular-24.png";
 import iceye from "../../assets/low-vision-regular-24.png";

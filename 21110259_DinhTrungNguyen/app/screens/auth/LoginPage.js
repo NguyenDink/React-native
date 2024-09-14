@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Alert, StyleSheet, Text, TextInput, TouchableOpacity, View, Image, Switch } from "react-native";
 import { login } from "../../services/AuthAPIService";
 import { handleLoginResponse, getToken } from "../../utils/AuthStorage";
-import logo from "../../assets/logo.jpg";
+import logo from "../../assets/logo.png";
 import iclock from "../../assets/lock-alt-regular-24.png";
 import icmail from "../../assets/envelope-regular-24.png";
 import iceye from "../../assets/low-vision-regular-24.png";
@@ -38,7 +38,7 @@ export default function LoginPage({ navigation }) {
     return (
         <View style={styles.container}>
             <Image source={logo} style={styles.image} />
-            <Text style={styles.description}>Chào mừng bạn đến với qnspJob</Text>
+            <Text style={styles.description}>Chào mừng bạn đến với JOB PORTAL</Text>
 
             <Text style={styles.title}>Đăng nhập</Text>
 

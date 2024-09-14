@@ -4,7 +4,7 @@ import { getToken } from "../../utils/AuthStorage";
 import { introspect } from "../../services/AuthAPIService";
 
 // Import hình ảnh từ thư mục cục bộ
-import logo from "../../assets/logo.jpg";
+import logo from "../../assets/logo.png";
 
 export default function Intro({ navigation }) {
     useEffect(() => {
