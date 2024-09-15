@@ -49,7 +49,7 @@ export default function RegisterPage({ navigation }) {
     return (
         <View style={styles.container}>
             <Image source={logo} style={styles.image} />
-            <Text style={styles.description}>Chào mừng bạn đến với qnspJob</Text>
+            <Text style={styles.description}>Chào mừng bạn đến với JOB PORTAL</Text>
 
             <Text style={styles.title}>Đăng ký tài khoản</Text>
 

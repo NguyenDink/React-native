@@ -1,9 +1,10 @@
-import React, { useState } from "react";
-import { View, Text, TextInput, FlatList, Image, StyleSheet, TouchableOpacity } from "react-native";
+import React, { useState, useEffect } from "react";
+import { View, Text, TextInput, FlatList, Image, TouchableOpacity } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 
 export default function HomeTab({ navigation }) {
     const [search, setSearch] = useState("");
+    const [filteredJobs, setFilteredJobs] = useState(jobList);
 
     const jobList = [
         {
@@ -53,6 +54,21 @@ export default function HomeTab({ navigation }) {
         },
     ];
 
+    useEffect(() => {
+        // Filter job list based on search query
+        if (search === "") {
+            setFilteredJobs(jobList);
+        } else {
+            const lowercasedSearch = search.toLowerCase();
+            const filtered = jobList.filter(
+                (job) =>
+                    job.title.toLowerCase().includes(lowercasedSearch) ||
+                    job.company.toLowerCase().includes(lowercasedSearch)
+            );
+            setFilteredJobs(filtered);
+        }
+    }, [search]);
+
     const renderJobItem = ({ item }) => (
         <TouchableOpacity
             className="flex-row bg-white p-4 rounded-lg mb-4 shadow-sm"
@@ -91,7 +107,7 @@ export default function HomeTab({ navigation }) {
 
             {/* Job list */}
             <FlatList
-                data={jobList}
+                data={filteredJobs}
                 renderItem={renderJobItem}
                 keyExtractor={(item) => item.id}
                 contentContainerStyle={{ paddingHorizontal: 12 }}
