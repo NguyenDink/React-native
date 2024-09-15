@@ -1,15 +1,15 @@
 import React, { useState } from "react";
-import { Alert, ActivityIndicator, Image, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
+import { ActivityIndicator, Alert, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 import Toast from "react-native-toast-message";
-import icmail from "../../assets/envelope-regular-24.png";
-import { sendOtp, validateOtp } from "../../services/AuthAPIService";
+import { sendOtp } from "../../services/AuthAPIService";
 
 export default function ForgotPassWordPage({ navigation }) {
+    const [loading, setLoading] = useState(false);
+
     const [email, setEmail] = useState("");
     const [emailError, setEmailError] = useState("");
+
     const [otpSent, setOtpSent] = useState(false);
-    const [otp, setOtp] = useState("");
-    const [loading, setLoading] = useState(false);
 
     const showToast = (type, text1, text2) => {
         Toast.show({
@@ -29,42 +29,32 @@ export default function ForgotPassWordPage({ navigation }) {
             /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
         if (email.trim() === "") {
             setEmailError("Email không được để trống");
+            setLoading(false);
         } else if (!emailRegex.test(email.toLowerCase())) {
             setEmailError("Email không đúng định dạng");
+            setLoading(false);
         } else {
             setEmailError("");
-        }
-        try {
-            const data = await sendOtp(email);
 
-            if (data.success) {
-                showToast("success", "Thành công", data.message);
-                setOtpSent(true);
-            } else {
-                showToast("error", "Lỗi", data.message);
+            try {
+                const data = await sendOtp(email);
+
+                if (data.success) {
+                    showToast("success", "Success", data.message);
+                    navigation.navigate("ResetPassWord", { email: email });
+                    setOtpSent(true);
+                } else {
+                    if (data.statusCode === 404) {
+                        setEmailError("Email này chưa được sử dụng, bạn hãy đăng ký tài khoản để tham gia");
+                    } else {
+                        setEmailError(data.message);
+                    }
+                }
+            } catch (error) {
+                Alert.alert("error", "Error", "An error occurred. Please try again.");
+            } finally {
+                setLoading(false);
             }
-        } catch (error) {
-            showToast("error", "Lỗi", "Có lỗi xảy ra. Xin hãy thử lại.");
-        } finally {
-            setLoading(false);
-        }
-    };
-
-    const handleConfirmOTP = async () => {
-        setLoading(true);
-        try {
-            const data = await validateOtp(email, otp);
-
-            if (data.success) {
-                showToast("success", "Thành công", data.message);
-                navigation.navigate("ResetPassWord", { email: email });
-            } else {
-                showToast("error", "Lỗi", data.message);
-            }
-        } catch (error) {
-            showToast("error", "Lỗi", "Có lỗi xảy ra. Xin hãy thử lại.");
-        } finally {
-            setLoading(false);
         }
     };
 
@@ -76,7 +66,6 @@ export default function ForgotPassWordPage({ navigation }) {
                     Vui lòng nhập email đăng ký của bạn. Chúng tôi sẽ gửi hướng dẫn đổi mật khẩu tới email này.
                 </Text>
                 <View style={[styles.inputContainer, emailError ? styles.inputError : null]}>
-                    <Image source={icmail} style={[styles.icon, styles.iconFaded]} />
                     <TextInput
                         style={styles.input}
                         placeholder="Nhập email"
@@ -91,42 +80,13 @@ export default function ForgotPassWordPage({ navigation }) {
                 </View>
                 {emailError ? <Text style={styles.errorText}>{emailError}</Text> : null}
             </View>
-            {otpSent && (
-                <View>
-                    <Text style={styles.description}>
-                        Chúng tôi đã gửi mã xác nhận tới địa chỉ <Text style={styles.bold}>{email}</Text>. Vui lòng kiểm
-                        tra hòm thư hoặc hòm thư spam để lấy mã và nhập vào bên dưới
-                    </Text>
-                    <View style={styles.inputContainer}>
-                        <TextInput
-                            style={styles.input}
-                            placeholder="Mã xác nhận"
-                            value={otp}
-                            onChangeText={setOtp}
-                            keyboardType="numeric"
-                        />
-                    </View>
-                    <Text style={styles.noteText}>
-                        Mã xác nhận hết hạn sau 5 phút kể từ khi bạn nhận được mã.{" "}
-                        <Text style={styles.bold}>Gửi lại mã.</Text>
-                    </Text>
-                </View>
-            )}
 
             {loading ? (
-                <ActivityIndicator size="large" color="#0000ff" style={{ marginBottom: 1 }} />
+                <ActivityIndicator size="large" color="#0000ff" />
             ) : (
-                <>
-                    {otpSent ? (
-                        <TouchableOpacity style={styles.button} onPress={handleConfirmOTP}>
-                            <Text style={styles.buttonText}>Xác nhận</Text>
-                        </TouchableOpacity>
-                    ) : (
-                        <TouchableOpacity style={styles.button} onPress={handleResetPassword}>
-                            <Text style={styles.buttonText}>Tạo lại mật khẩu</Text>
-                        </TouchableOpacity>
-                    )}
-                </>
+                <TouchableOpacity style={styles.button} onPress={handleResetPassword}>
+                    <Text style={styles.buttonText}>Tạo lại mật khẩu</Text>
+                </TouchableOpacity>
             )}
         </View>
     );

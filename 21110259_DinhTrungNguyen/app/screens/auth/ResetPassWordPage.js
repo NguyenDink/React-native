@@ -1,15 +1,35 @@
 import React, { useState } from "react";
-import { StyleSheet, Text, TextInput, View, Alert, TouchableOpacity, Image } from "react-native";
-import { resetPassword } from "../../services/AuthAPIService";
+import { ActivityIndicator, StyleSheet, Text, TextInput, View, Alert, TouchableOpacity, Image } from "react-native";
+import { resetPassword, sendOtp } from "../../services/AuthAPIService";
 import iceye from "../../assets/low-vision-regular-24.png";
 import iclock from "../../assets/lock-alt-regular-24.png";
 
 export default function ResetPassWordPage({ navigation, route }) {
     const { email } = route.params;
+    const [otp, setOtp] = useState("");
+    const [loading, setLoading] = useState(false);
     const [newPassword, setNewPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
     const [showPassword, setShowPassword] = useState(false);
     const [showConfirmPass, setShowConfirmPass] = useState(false);
+
+    const handleSendOtp = async () => {
+        setLoading(true);
+
+        try {
+            const data = await sendOtp(email);
+
+            if (data.success) {
+                Alert.alert("Success", data.message);
+            } else {
+                Alert.alert("Error", data.message);
+            }
+        } catch (error) {
+            Alert.alert("Error", "An error occurred. Please try again.");
+        } finally {
+            setLoading(false);
+        }
+    };
 
     const handleResetPassword = async () => {
         if (!newPassword || !confirmPassword) {
@@ -22,7 +42,7 @@ export default function ResetPassWordPage({ navigation, route }) {
             return;
         }
         try {
-            const data = await resetPassword(email, newPassword);
+            const data = await resetPassword(email, newPassword, otp);
 
             if (data.success) {
                 Alert.alert("Thành công", data.message);
@@ -39,7 +59,28 @@ export default function ResetPassWordPage({ navigation, route }) {
         <View style={styles.container}>
             <View>
                 <Text style={styles.title}>Đặt lại mật khẩu</Text>
-                <Text style={styles.description}>Hãy đặt mật khẩu mới cho tài khoản của bạn.</Text>
+                <Text style={styles.description}>
+                    Chúng tôi đã gửi mã xác nhận tới địa chỉ <Text style={styles.bold}>{email}</Text>. Vui lòng kiểm tra
+                    hòm thư hoặc hòm thư spam để lấy mã và nhập vào bên dưới
+                </Text>
+
+                <Text>
+                    Mã xác nhận <Text style={{ color: "red" }}>*</Text>
+                </Text>
+                <View style={styles.inputContainer}>
+                    <TextInput
+                        style={styles.input}
+                        placeholder="Nhập mã xác nhận"
+                        value={otp}
+                        onChangeText={setOtp}
+                        keyboardType="numeric"
+                        maxLength={6}
+                    />
+                </View>
+
+                <Text>
+                    Mật khẩu mới <Text style={{ color: "red" }}>*</Text>
+                </Text>
                 <View style={styles.inputContainer}>
                     <Image source={iclock} style={[styles.icon, styles.iconFaded]} />
                     <TextInput
@@ -69,9 +110,20 @@ export default function ResetPassWordPage({ navigation, route }) {
                         <Image source={iceye} style={[styles.icon, styles.iconFaded]} />
                     </TouchableOpacity>
                 </View>
+
+                <View>
+                    <Text style={styles.noteText}>Mã xác nhận hết hạn sau 5 phút kể từ khi bạn nhận được mã.</Text>
+                    {loading ? (
+                        <ActivityIndicator size="large" color="#0000ff" />
+                    ) : (
+                        <TouchableOpacity onPress={handleSendOtp}>
+                            <Text style={[styles.noteText, styles.bold]}>Gửi lại mã.</Text>
+                        </TouchableOpacity>
+                    )}
+                </View>
             </View>
             <TouchableOpacity style={styles.button} onPress={handleResetPassword}>
-                <Text style={styles.buttonText}>Tạo lại mật khẩu</Text>
+                <Text style={styles.buttonText}>Cập nhật mật khẩu</Text>
             </TouchableOpacity>
         </View>
     );
@@ -124,6 +176,11 @@ const styles = StyleSheet.create({
         height: "100%",
         fontSize: 16,
     },
+    errorText: {
+        color: "red",
+        marginBottom: 16,
+        fontSize: 14,
+    },
     button: {
         backgroundColor: "#509b43",
         width: "100%",
@@ -136,5 +193,13 @@ const styles = StyleSheet.create({
     buttonText: {
         color: "#ffffff",
         fontSize: 18,
+    },
+    bold: {
+        fontWeight: "bold",
+        color: "#509b43",
+    },
+    noteText: {
+        color: "#a0a0a0",
+        textAlign: "center",
     },
 });
