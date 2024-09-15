@@ -54,138 +54,48 @@ export default function HomeTab({ navigation }) {
     ];
 
     const renderJobItem = ({ item }) => (
-        <TouchableOpacity style={styles.jobCard} onPress={() => navigation.navigate("JobDetail")}>
-            <Image source={{ uri: item.logo }} style={styles.logo} />
+        <TouchableOpacity
+            className="flex-row bg-white p-4 rounded-lg mb-4 shadow-sm"
+            onPress={() => navigation.navigate("JobDetail")}
+        >
+            <Image source={{ uri: item.logo }} className="w-16 h-16 rounded-lg mr-4" />
 
-            <View style={styles.jobDetails}>
-                <Text style={styles.jobTitle}>{item.title}</Text>
-                <Text style={styles.company}>{item.company}</Text>
+            <View className="flex-1">
+                <Text className="text-lg font-bold text-gray-900 mb-1">{item.title}</Text>
+                <Text className="text-sm text-gray-600 mb-2">{item.company}</Text>
 
-                <View style={styles.infoContainer}>
-                    <Text style={styles.info}>{item.address}</Text>
-                    <Text style={styles.info}>{item.experience}</Text>
+                <View className="flex-row space-x-2 mb-2">
+                    <Text className="text-sm text-gray-700 bg-gray-100 py-1 px-2 rounded-md">{item.address}</Text>
+                    <Text className="text-sm text-gray-700 bg-gray-100 py-1 px-2 rounded-md">{item.experience}</Text>
                 </View>
 
-                <Text style={styles.salary}>{item.salary}</Text>
+                <View className="flex-row space-x-2 mb-2">
+                    <Text className="text-sm text-[#509b43] bg-[#e8f5e9] py-1 px-2 rounded-md">{item.salary}</Text>
+                </View>
             </View>
         </TouchableOpacity>
     );
 
     return (
-        <View style={styles.container}>
-            <View style={styles.searchContainer}>
-                <Ionicons name="search" size={24} color="#888" style={styles.searchIcon} />
+        <View className="flex-1 bg-gray-100 pt-3">
+            {/* Search bar */}
+            <View className="flex-row items-center bg-white rounded-lg py-3 px-4 mx-3 mt-8 mb-4 shadow-sm">
+                <Ionicons name="search" size={24} color="#888" className="mr-3" />
                 <TextInput
-                    style={styles.searchInput}
+                    className="flex-1 text-base text-gray-700"
                     placeholder="Tìm kiếm công việc"
                     value={search}
                     onChangeText={(text) => setSearch(text)}
                 />
             </View>
 
+            {/* Job list */}
             <FlatList
                 data={jobList}
                 renderItem={renderJobItem}
                 keyExtractor={(item) => item.id}
-                contentContainerStyle={styles.listContainer}
+                contentContainerStyle={{ paddingHorizontal: 12 }}
             />
         </View>
     );
 }
-
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: "#f1f4f9",
-        paddingTop: 10,
-    },
-    searchContainer: {
-        flexDirection: "row",
-        alignItems: "center",
-        backgroundColor: "#ffffff",
-        borderRadius: 10,
-        marginTop: 30,
-        paddingVertical: 10,
-        paddingHorizontal: 15,
-        marginHorizontal: 10,
-        marginBottom: 15,
-        shadowColor: "#000",
-        shadowOpacity: 0.1,
-        shadowRadius: 4,
-        elevation: 3,
-    },
-    searchIcon: {
-        marginRight: 10,
-    },
-    searchInput: {
-        flex: 1,
-        height: 40,
-        fontSize: 16,
-        color: "#333",
-    },
-    listContainer: {
-        paddingHorizontal: 10,
-    },
-    jobCard: {
-        flexDirection: "row",
-        backgroundColor: "#ffffff",
-        padding: 15,
-        borderRadius: 12,
-        marginBottom: 15,
-        shadowColor: "#000",
-        shadowOpacity: 0.15,
-        shadowRadius: 4,
-        elevation: 3,
-    },
-    logo: {
-        width: 60,
-        height: 60,
-        borderRadius: 8,
-        marginRight: 15,
-    },
-    jobDetails: {
-        flex: 1,
-    },
-    jobTitle: {
-        fontSize: 18,
-        fontWeight: "bold",
-        color: "#333",
-        marginBottom: 5,
-    },
-    company: {
-        fontSize: 14,
-        color: "#888",
-        marginBottom: 5,
-    },
-    infoContainer: {
-        flexDirection: "row",
-        marginBottom: 10,
-    },
-    info: {
-        fontSize: 14,
-        color: "#666",
-        backgroundColor: "#f0f0f0",
-        paddingHorizontal: 12,
-        paddingVertical: 6,
-        marginRight: 8,
-        borderRadius: 6,
-        shadowColor: "#000",
-        shadowOpacity: 0.1,
-        shadowRadius: 4,
-        elevation: 1,
-    },
-    salary: {
-        fontSize: 16,
-        fontWeight: "bold",
-        color: "#509b43",
-        backgroundColor: "#e8f5e9",
-        paddingHorizontal: 12,
-        paddingVertical: 6,
-        borderRadius: 6,
-        shadowColor: "#000",
-        shadowOpacity: 0.1,
-        shadowRadius: 4,
-        elevation: 1,
-        marginTop: 5,
-    },
-});

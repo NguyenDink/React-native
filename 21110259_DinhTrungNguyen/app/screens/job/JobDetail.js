@@ -1,9 +1,8 @@
 import React from "react";
 import { View, Text, ScrollView, StyleSheet, TouchableOpacity, Image } from "react-native";
-import { Ionicons } from "@expo/vector-icons"; // Using Ionicons for the back button icon
+import { Ionicons } from "@expo/vector-icons";
 
 export default function JobDetail({ navigation }) {
-    // Hardcoded job data
     const job = {
         id: "1",
         logo: "https://bcassetcdn.com/public/blog/wp-content/uploads/2021/10/07203359/australia-tech-map-by-jimjemr-brandcrowd.png",
@@ -31,7 +30,6 @@ export default function JobDetail({ navigation }) {
             </TouchableOpacity>
 
             <ScrollView contentContainerStyle={styles.contentContainer}>
-                {/* Job Header with Title, Company, Salary, Address, and Experience */}
                 <View style={styles.headerContainer}>
                     {/* Logo (partially overlaid) */}
                     <View style={styles.logoWrapper}>
@@ -85,13 +83,11 @@ export default function JobDetail({ navigation }) {
                     <Text style={styles.sectionContent}>{job.description}</Text>
                 </View>
 
-                {/* Candidate Requirements */}
                 <View style={styles.section}>
                     <Text style={styles.sectionTitle}>Yêu cầu ứng viên</Text>
                     <Text style={styles.sectionContent}>{job.requirements}</Text>
                 </View>
 
-                {/* Benefits */}
                 <View style={styles.section}>
                     <Text style={styles.sectionTitle}>Quyền lợi</Text>
                     <Text style={styles.sectionContent}>{job.benefits}</Text>
@@ -115,7 +111,7 @@ const styles = StyleSheet.create({
     },
     contentContainer: {
         padding: 15,
-        paddingBottom: 80, // Extra padding to prevent overlapping with the apply button
+        paddingBottom: 80,
     },
     backButton: {
         position: "absolute",
@@ -126,7 +122,7 @@ const styles = StyleSheet.create({
         borderRadius: 50,
         zIndex: 10,
     },
-    /* Header styles */
+
     headerContainer: {
         backgroundColor: "#fff",
         borderRadius: 15,
@@ -192,7 +188,7 @@ const styles = StyleSheet.create({
         fontSize: 16,
         marginTop: 5,
     },
-    /* Section styles */
+
     section: {
         marginBottom: 20,
     },
@@ -207,7 +203,7 @@ const styles = StyleSheet.create({
         color: "#666",
         lineHeight: 22,
     },
-    /* Info row without shadow and border */
+
     infoRow: {
         flexDirection: "row",
         justifyContent: "space-between",
