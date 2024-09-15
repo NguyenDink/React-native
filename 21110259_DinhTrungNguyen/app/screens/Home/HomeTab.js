@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { View, Text, TextInput, FlatList, Image, StyleSheet, TouchableOpacity } from "react-native";
-import { Ionicons } from "@expo/vector-icons"; // Sử dụng biểu tượng từ thư viện expo
+import { Ionicons } from "@expo/vector-icons";
 
-export default function HomeTab() {
+export default function HomeTab({ navigation }) {
     const [search, setSearch] = useState("");
 
     const jobList = [
@@ -54,11 +54,9 @@ export default function HomeTab() {
     ];
 
     const renderJobItem = ({ item }) => (
-        <TouchableOpacity style={styles.jobCard}>
-            {/* Logo Công Việc */}
+        <TouchableOpacity style={styles.jobCard} onPress={() => navigation.navigate("JobDetail")}>
             <Image source={{ uri: item.logo }} style={styles.logo} />
 
-            {/* Chi Tiết Công Việc */}
             <View style={styles.jobDetails}>
                 <Text style={styles.jobTitle}>{item.title}</Text>
                 <Text style={styles.company}>{item.company}</Text>
@@ -75,7 +73,6 @@ export default function HomeTab() {
 
     return (
         <View style={styles.container}>
-            {/* Thanh Tìm Kiếm */}
             <View style={styles.searchContainer}>
                 <Ionicons name="search" size={24} color="#888" style={styles.searchIcon} />
                 <TextInput
@@ -86,7 +83,6 @@ export default function HomeTab() {
                 />
             </View>
 
-            {/* Danh Sách Công Việc */}
             <FlatList
                 data={jobList}
                 renderItem={renderJobItem}

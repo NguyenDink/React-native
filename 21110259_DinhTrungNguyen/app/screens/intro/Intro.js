@@ -31,7 +31,6 @@ export default function Intro({ navigation }) {
     return (
         <View style={styles.container}>
             <Image source={logo} style={styles.image} />
-            <Text style={styles.textName}>qnspJob</Text>
         </View>
     );
 }
