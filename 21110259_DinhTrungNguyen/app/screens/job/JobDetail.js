@@ -31,50 +31,55 @@ export default function JobDetail({ navigation }) {
             </TouchableOpacity>
 
             <ScrollView contentContainerStyle={styles.contentContainer}>
-                {/* Job Logo */}
-                <View style={styles.logoContainer}>
-                    <Image source={{ uri: job.logo }} style={styles.logo} />
-                </View>
+                {/* Job Header with Title, Company, Salary, Address, and Experience */}
+                <View style={styles.headerContainer}>
+                    {/* Logo (partially overlaid) */}
+                    <View style={styles.logoWrapper}>
+                        <Image source={{ uri: job.logo }} style={styles.logo} />
+                    </View>
 
-                {/* Job Title and Company */}
-                <View style={styles.header}>
-                    <Text style={styles.jobTitle}>{job.title}</Text>
-                    <Text style={styles.company}>{job.company}</Text>
-                </View>
-
-                {/* Salary, Address, Experience, and Other Details */}
-                <View style={styles.infoSection}>
-                    <View style={styles.infoRow}>
-                        <Text style={styles.label}>Mức lương:</Text>
-                        <Text style={styles.value}>{job.salary}</Text>
-                    </View>
-                    <View style={styles.infoRow}>
-                        <Text style={styles.label}>Địa chỉ:</Text>
-                        <Text style={styles.value}>{job.address}</Text>
-                    </View>
-                    <View style={styles.infoRow}>
-                        <Text style={styles.label}>Kinh nghiệm:</Text>
-                        <Text style={styles.value}>{job.experience}</Text>
-                    </View>
-                    <View style={styles.infoRow}>
-                        <Text style={styles.label}>Hình thức:</Text>
-                        <Text style={styles.value}>{job.type}</Text>
-                    </View>
-                    <View style={styles.infoRow}>
-                        <Text style={styles.label}>Số lượng ứng tuyển:</Text>
-                        <Text style={styles.value}>{job.applicants}</Text>
-                    </View>
-                    <View style={styles.infoRow}>
-                        <Text style={styles.label}>Giới tính:</Text>
-                        <Text style={styles.value}>{job.gender}</Text>
-                    </View>
-                    <View style={styles.infoRow}>
-                        <Text style={styles.label}>Hạn nộp hồ sơ:</Text>
-                        <Text style={styles.value}>{job.deadline}</Text>
+                    {/* Job Details */}
+                    <View style={styles.jobInfoContainer}>
+                        <Text style={styles.jobTitle}>{job.title}</Text>
+                        <Text style={styles.company}>{job.company}</Text>
+                        <View style={styles.jobInfoRow}>
+                            <View style={styles.infoColumn}>
+                                <Text style={styles.infoLabel}>Mức lương</Text>
+                                <Text style={styles.jobValue}>{job.salary}</Text>
+                            </View>
+                            <View style={styles.infoColumn}>
+                                <Text style={styles.infoLabel}>Địa chỉ</Text>
+                                <Text style={styles.jobValue}>{job.address}</Text>
+                            </View>
+                            <View style={styles.infoColumn}>
+                                <Text style={styles.infoLabel}>Kinh nghiệm</Text>
+                                <Text style={styles.jobValue}>{job.experience}</Text>
+                            </View>
+                        </View>
                     </View>
                 </View>
 
                 {/* Job Description */}
+                <View style={styles.section}>
+                    <Text style={styles.sectionTitle}>Thông tin chung</Text>
+                    <View style={styles.infoRow}>
+                        <Text style={styles.label}>Hình thức:</Text>
+                        <Text style={styles.infoValue}>{job.type}</Text>
+                    </View>
+                    <View style={styles.infoRow}>
+                        <Text style={styles.label}>Số lượng ứng tuyển:</Text>
+                        <Text style={styles.infoValue}>{job.applicants}</Text>
+                    </View>
+                    <View style={styles.infoRow}>
+                        <Text style={styles.label}>Giới tính:</Text>
+                        <Text style={styles.infoValue}>{job.gender}</Text>
+                    </View>
+                    <View style={styles.infoRow}>
+                        <Text style={styles.label}>Hạn nộp hồ sơ:</Text>
+                        <Text style={styles.infoValue}>{job.deadline}</Text>
+                    </View>
+                </View>
+
                 <View style={styles.section}>
                     <Text style={styles.sectionTitle}>Mô tả công việc</Text>
                     <Text style={styles.sectionContent}>{job.description}</Text>
@@ -121,49 +126,73 @@ const styles = StyleSheet.create({
         borderRadius: 50,
         zIndex: 10,
     },
-    logoContainer: {
-        alignItems: "center",
-        marginTop: 40, // Adjusted for back button spacing
+    /* Header styles */
+    headerContainer: {
+        backgroundColor: "#fff",
+        borderRadius: 15,
+        padding: 20,
+        marginTop: 80,
+        shadowColor: "#000",
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.1,
+        shadowRadius: 5,
+        elevation: 5,
+        position: "relative",
+        marginBottom: 20,
     },
-    logo: {
-        width: 80,
-        height: 80,
+    logoWrapper: {
+        position: "absolute",
+        top: -50,
+        left: "41%",
+        zIndex: 1,
+        shadowColor: "#000",
+        elevation: 1,
+        backgroundColor: "#fff",
         borderRadius: 10,
     },
-    header: {
-        marginBottom: 20,
-        borderBottomWidth: 1,
-        borderBottomColor: "#ddd",
-        paddingBottom: 15,
-        marginTop: 10,
+    logo: {
+        width: 100,
+        height: 100,
+        borderRadius: 10,
+    },
+    jobInfoContainer: {
+        alignItems: "center",
+        marginTop: 40,
     },
     jobTitle: {
         fontSize: 24,
         fontWeight: "bold",
         color: "#333",
         textAlign: "center",
+        marginBottom: 10,
     },
     company: {
         fontSize: 18,
         color: "#777",
         marginTop: 5,
         textAlign: "center",
-    },
-    infoSection: {
-        marginBottom: 20,
-    },
-    infoRow: {
-        flexDirection: "row",
-        justifyContent: "space-between",
         marginBottom: 10,
     },
-    label: {
+    jobInfoRow: {
+        flexDirection: "row",
+        justifyContent: "space-around",
+        width: "100%",
+        marginTop: 10,
+    },
+    infoColumn: {
+        alignItems: "center",
+    },
+    infoLabel: {
         fontWeight: "bold",
-        color: "#555",
+        fontSize: 14,
+        color: "#666",
     },
-    value: {
-        color: "#333",
+    jobValue: {
+        color: "#509b43",
+        fontSize: 16,
+        marginTop: 5,
     },
+    /* Section styles */
     section: {
         marginBottom: 20,
     },
@@ -177,6 +206,21 @@ const styles = StyleSheet.create({
         fontSize: 16,
         color: "#666",
         lineHeight: 22,
+    },
+    /* Info row without shadow and border */
+    infoRow: {
+        flexDirection: "row",
+        justifyContent: "space-between",
+        marginBottom: 10,
+    },
+    label: {
+        fontWeight: "bold",
+        fontSize: 16,
+        color: "#333",
+    },
+    infoValue: {
+        fontSize: 16,
+        color: "#666",
     },
     applyButtonContainer: {
         position: "absolute",
