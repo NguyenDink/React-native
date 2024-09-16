@@ -1,61 +1,40 @@
-import React, { useState, useEffect } from "react";
-import { View, Text, TextInput, FlatList, Image, TouchableOpacity } from "react-native";
+import React, { useState, useEffect, useCallback } from "react";
+import { ActivityIndicator, View, Text, TextInput, FlatList, Image, TouchableOpacity } from "react-native";
+import { useFocusEffect } from "@react-navigation/native";
 import { Ionicons } from "@expo/vector-icons";
+
+import { getListJobs } from "../../services/JobAPIService";
 
 export default function HomeTab({ navigation }) {
     const [search, setSearch] = useState("");
-    const [filteredJobs, setFilteredJobs] = useState(jobList);
+    const [filteredJobs, setFilteredJobs] = useState([]);
 
-    const jobList = [
-        {
-            id: "1",
-            logo: "https://bcassetcdn.com/public/blog/wp-content/uploads/2021/10/07203359/australia-tech-map-by-jimjemr-brandcrowd.png",
-            title: "Software Engineer",
-            company: "Tech Company",
-            salary: "20-30 triệu VND",
-            address: "Hồ Chí Minh",
-            experience: "2 năm",
-        },
-        {
-            id: "2",
-            logo: "https://d1csarkz8obe9u.cloudfront.net/posterpreviews/corporate-company-logo-design-template-2402e0689677112e3b2b6e0f399d7dc3_screen.jpg?ts=1561532453",
-            title: "Marketing Specialist",
-            company: "Creative Agency",
-            salary: "10-15 triệu VND",
-            address: "Hà Nội",
-            experience: "1 năm",
-        },
-        {
-            id: "3",
-            logo: "https://cdn.shopify.com/shopifycloud/hatchful_web_two/bundles/7e55eb3d6a1a096058955ae7d64ee9d5.png",
-            title: "UI/UX Designer",
-            company: "Design Studio",
-            salary: "15-25 triệu VND",
-            address: "Đà Nẵng",
-            experience: "2 năm",
-        },
-        {
-            id: "4",
-            logo: "https://dynamic.brandcrowd.com/asset/logo/aa3b9817-26ca-40d0-8c59-b4a8d149bda2/logo-search-grid-2x?logoTemplateVersion=1&v=638550553385470000",
-            title: "Sales Manager",
-            company: "Retail Corp",
-            salary: "20-35 triệu VND",
-            address: "Hồ Chí Minh",
-            experience: "3 năm",
-        },
-        {
-            id: "5",
-            logo: "https://marketplace.canva.com/EAE0rNNM2Fg/1/0/1600w/canva-letter-c-trade-marketing-logo-design-template-r9VFYrbB35Y.jpg",
-            title: "HR Specialist",
-            company: "Global Enterprise",
-            salary: "12-18 triệu VND",
-            address: "Hà Nội",
-            experience: "2 năm",
-        },
-    ];
+    const [jobList, setJobList] = useState([]);
+    const [loading, setLoading] = useState(true);
+
+    const fetchData = useCallback(async () => {
+        try {
+            setLoading(true);
+            const data = await getListJobs();
+            if (data.success) {
+                setJobList(data.result);
+            } else {
+                Alert.alert("Error", data.message);
+            }
+        } catch (error) {
+            Alert.alert("Error", "Failed to fetch user information.");
+        } finally {
+            setLoading(false);
+        }
+    }, []);
+
+    useFocusEffect(
+        useCallback(() => {
+            fetchData();
+        }, [fetchData])
+    );
 
     useEffect(() => {
-        // Filter job list based on search query
         if (search === "") {
             setFilteredJobs(jobList);
         } else {
@@ -67,12 +46,12 @@ export default function HomeTab({ navigation }) {
             );
             setFilteredJobs(filtered);
         }
-    }, [search]);
+    }, [search, jobList]);
 
     const renderJobItem = ({ item }) => (
         <TouchableOpacity
             className="flex-row bg-white p-4 rounded-lg mb-4 shadow-sm"
-            onPress={() => navigation.navigate("JobDetail")}
+            onPress={() => navigation.navigate("JobDetail", { job: item })}
         >
             <Image source={{ uri: item.logo }} className="w-16 h-16 rounded-lg mr-4" />
 
@@ -91,6 +70,14 @@ export default function HomeTab({ navigation }) {
             </View>
         </TouchableOpacity>
     );
+
+    if (loading) {
+        return (
+            <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+                <ActivityIndicator size="large" color="#0000ff" />
+            </View>
+        );
+    }
 
     return (
         <View className="flex-1 bg-gray-100 pt-3">

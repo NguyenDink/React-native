@@ -1,25 +1,18 @@
-import React from "react";
+import React, { useState } from "react";
 import { View, Text, ScrollView, TouchableOpacity, Image } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 
-export default function JobDetail({ navigation }) {
-    const job = {
-        id: "1",
-        logo: "https://bcassetcdn.com/public/blog/wp-content/uploads/2021/10/07203359/australia-tech-map-by-jimjemr-brandcrowd.png",
-        title: "Software Engineer",
-        company: "Tech Company",
-        salary: "20-30 triệu VND",
-        address: "Hồ Chí Minh",
-        experience: "2 năm",
-        type: "Toàn thời gian",
-        applicants: "5 người",
-        gender: "Không yêu cầu",
-        deadline: "31/12/2024",
-        description:
-            "Tham gia phát triển và bảo trì các ứng dụng web. Hợp tác với các nhóm khác để phát triển tính năng mới.",
-        requirements:
-            "Tốt nghiệp đại học ngành Công nghệ Thông tin. Ít nhất 2 năm kinh nghiệm làm việc với React và Node.js.",
-        benefits: "Lương thưởng cạnh tranh, môi trường làm việc năng động, chế độ bảo hiểm đầy đủ.",
+export default function JobDetail({ route, navigation }) {
+    const [isPressed, setIsPressed] = useState(false);
+
+    const { job } = route.params;
+
+    const handleBack = () => {
+        if (!isPressed) {
+            setIsPressed(true);
+            navigation.goBack();
+            setTimeout(() => setIsPressed(false), 300); // Reset trạng thái sau 300 milliseconds
+        }
     };
 
     return (
