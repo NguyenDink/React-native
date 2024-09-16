@@ -1,11 +1,9 @@
 import React, { useState } from "react";
 import { Alert, StyleSheet, Text, TextInput, TouchableOpacity, View, Image, Switch } from "react-native";
+import { Ionicons } from "@expo/vector-icons";
 import { login } from "../../services/AuthAPIService";
 import { handleLoginResponse, getToken } from "../../utils/AuthStorage";
 import logo from "../../assets/logo.png";
-import iclock from "../../assets/lock-alt-regular-24.png";
-import icmail from "../../assets/envelope-regular-24.png";
-import iceye from "../../assets/low-vision-regular-24.png";
 
 export default function LoginPage({ navigation }) {
     const [email, setEmail] = useState("");
@@ -43,7 +41,7 @@ export default function LoginPage({ navigation }) {
             <Text style={styles.title}>Đăng nhập</Text>
 
             <View style={styles.inputContainer}>
-                <Image source={icmail} style={[styles.icon, styles.iconFaded]} />
+                <Ionicons name="mail-outline" size={24} color="#a0a0a0" style={styles.icon} />
                 <TextInput
                     style={styles.input}
                     placeholder="Email"
@@ -54,7 +52,7 @@ export default function LoginPage({ navigation }) {
             </View>
 
             <View style={styles.inputContainer}>
-                <Image source={iclock} style={[styles.icon, styles.iconFaded]} />
+                <Ionicons name="lock-closed-outline" size={24} color="#a0a0a0" style={styles.icon} />
                 <TextInput
                     style={styles.input}
                     placeholder="Mật khẩu"
@@ -64,7 +62,12 @@ export default function LoginPage({ navigation }) {
                     onChangeText={setPassword}
                 />
                 <TouchableOpacity onPress={() => setShowPassword(!showPassword)}>
-                    <Image source={iceye} style={[styles.icon, styles.iconFaded]} />
+                    <Ionicons
+                        name={showPassword ? "eye-off-outline" : "eye-outline"}
+                        size={24}
+                        color="#a0a0a0"
+                        style={styles.icon}
+                    />
                 </TouchableOpacity>
             </View>
 
@@ -144,12 +147,7 @@ const styles = StyleSheet.create({
         backgroundColor: "#f9f9f9",
     },
     icon: {
-        width: 24,
-        height: 24,
         marginRight: 10,
-    },
-    iconFaded: {
-        tintColor: "#a0a0a0",
     },
     input: {
         flex: 1,

@@ -1,8 +1,7 @@
 import React, { useState } from "react";
-import { ActivityIndicator, StyleSheet, Text, TextInput, View, Alert, TouchableOpacity, Image } from "react-native";
+import { ActivityIndicator, StyleSheet, Text, TextInput, View, Alert, TouchableOpacity } from "react-native";
+import { Ionicons } from "@expo/vector-icons";
 import { resetPassword, sendOtp } from "../../services/AuthAPIService";
-import iceye from "../../assets/low-vision-regular-24.png";
-import iclock from "../../assets/lock-alt-regular-24.png";
 
 export default function ResetPassWordPage({ navigation, route }) {
     const { email } = route.params;
@@ -76,13 +75,16 @@ export default function ResetPassWordPage({ navigation, route }) {
                         keyboardType="numeric"
                         maxLength={6}
                     />
+                    <TouchableOpacity style={styles.resendButton} onPress={handleSendOtp}>
+                        <Text style={styles.resendButtonText}>Gửi lại mã</Text>
+                    </TouchableOpacity>
                 </View>
 
                 <Text>
                     Mật khẩu mới <Text style={{ color: "red" }}>*</Text>
                 </Text>
                 <View style={styles.inputContainer}>
-                    <Image source={iclock} style={[styles.icon, styles.iconFaded]} />
+                    <Ionicons name="lock-closed-outline" size={24} color="#a0a0a0" style={styles.icon} />
                     <TextInput
                         style={styles.input}
                         placeholder="Mật khẩu mới"
@@ -92,12 +94,12 @@ export default function ResetPassWordPage({ navigation, route }) {
                         onChangeText={setNewPassword}
                     />
                     <TouchableOpacity onPress={() => setShowPassword(!showPassword)}>
-                        <Image source={iceye} style={[styles.icon, styles.iconFaded]} />
+                        <Ionicons name={showPassword ? "eye-off-outline" : "eye-outline"} size={24} color="#a0a0a0" />
                     </TouchableOpacity>
                 </View>
 
                 <View style={styles.inputContainer}>
-                    <Image source={iclock} style={[styles.icon, styles.iconFaded]} />
+                    <Ionicons name="lock-closed-outline" size={24} color="#a0a0a0" style={styles.icon} />
                     <TextInput
                         style={styles.input}
                         placeholder="Nhập lại mật khẩu"
@@ -107,19 +109,17 @@ export default function ResetPassWordPage({ navigation, route }) {
                         onChangeText={setConfirmPassword}
                     />
                     <TouchableOpacity onPress={() => setShowConfirmPass(!showConfirmPass)}>
-                        <Image source={iceye} style={[styles.icon, styles.iconFaded]} />
+                        <Ionicons
+                            name={showConfirmPass ? "eye-off-outline" : "eye-outline"}
+                            size={24}
+                            color="#a0a0a0"
+                        />
                     </TouchableOpacity>
                 </View>
 
                 <View>
                     <Text style={styles.noteText}>Mã xác nhận hết hạn sau 5 phút kể từ khi bạn nhận được mã.</Text>
-                    {loading ? (
-                        <ActivityIndicator size="large" color="#0000ff" />
-                    ) : (
-                        <TouchableOpacity onPress={handleSendOtp}>
-                            <Text style={[styles.noteText, styles.bold]}>Gửi lại mã.</Text>
-                        </TouchableOpacity>
-                    )}
+                    {loading && <ActivityIndicator size="large" color="#0000ff" style={styles.loading} />}
                 </View>
             </View>
             <TouchableOpacity style={styles.button} onPress={handleResetPassword}>
@@ -159,22 +159,24 @@ const styles = StyleSheet.create({
         paddingHorizontal: 15,
         backgroundColor: "#f9f9f9",
     },
-    inputError: {
-        borderColor: "red",
-        borderWidth: 1,
-    },
     icon: {
-        width: 24,
-        height: 24,
         marginRight: 10,
-    },
-    iconFaded: {
-        tintColor: "#a0a0a0",
     },
     input: {
         flex: 1,
         height: "100%",
         fontSize: 16,
+    },
+    resendButton: {
+        backgroundColor: "#509b43",
+        borderRadius: 5,
+        paddingVertical: 8,
+        paddingHorizontal: 12,
+        marginLeft: 10,
+    },
+    resendButtonText: {
+        color: "#ffffff",
+        fontSize: 14,
     },
     errorText: {
         color: "red",
