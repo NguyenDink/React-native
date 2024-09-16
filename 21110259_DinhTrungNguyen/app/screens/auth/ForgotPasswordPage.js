@@ -1,14 +1,12 @@
 import React, { useState } from "react";
-import { ActivityIndicator, Alert, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
+import { ActivityIndicator, Alert, Text, TextInput, TouchableOpacity, View } from "react-native";
 import Toast from "react-native-toast-message";
 import { sendOtp } from "../../services/AuthAPIService";
 
 export default function ForgotPassWordPage({ navigation }) {
     const [loading, setLoading] = useState(false);
-
     const [email, setEmail] = useState("");
     const [emailError, setEmailError] = useState("");
-
     const [otpSent, setOtpSent] = useState(false);
 
     const showToast = (type, text1, text2) => {
@@ -59,15 +57,19 @@ export default function ForgotPassWordPage({ navigation }) {
     };
 
     return (
-        <View style={styles.container}>
+        <View className="flex-1 bg-white px-5 justify-between">
             <View>
-                <Text style={styles.title}>Quên mật khẩu</Text>
-                <Text style={styles.description}>
+                <Text className="text-2xl font-bold text-gray-800 mt-10 mb-8">Quên mật khẩu</Text>
+                <Text className="text-base text-gray-800 mb-5">
                     Vui lòng nhập email đăng ký của bạn. Chúng tôi sẽ gửi hướng dẫn đổi mật khẩu tới email này.
                 </Text>
-                <View style={[styles.inputContainer, emailError ? styles.inputError : null]}>
+                <View
+                    className={`flex-row items-center w-full h-12 rounded-lg mb-2 px-4 ${
+                        emailError ? "border border-red-500" : "bg-gray-100"
+                    }`}
+                >
                     <TextInput
-                        style={styles.input}
+                        className="flex-1 h-full text-base text-gray-700"
                         placeholder="Nhập email"
                         placeholderTextColor="#a0a0a0"
                         value={email}
@@ -78,90 +80,21 @@ export default function ForgotPassWordPage({ navigation }) {
                         editable={!otpSent}
                     />
                 </View>
-                {emailError ? <Text style={styles.errorText}>{emailError}</Text> : null}
+                {emailError ? <Text className="text-red-500 text-sm mb-4">{emailError}</Text> : null}
             </View>
 
-            {loading ? (
-                <ActivityIndicator size="large" color="#0000ff" />
-            ) : (
-                <TouchableOpacity style={styles.button} onPress={handleResetPassword}>
-                    <Text style={styles.buttonText}>Tạo lại mật khẩu</Text>
-                </TouchableOpacity>
-            )}
+            <View>
+                {loading ? (
+                    <ActivityIndicator size="large" color="#0000ff" />
+                ) : (
+                    <TouchableOpacity
+                        className="bg-[#509b43] w-full rounded-lg py-3 px-5"
+                        onPress={handleResetPassword}
+                    >
+                        <Text className="text-white text-center text-lg">Tạo lại mật khẩu</Text>
+                    </TouchableOpacity>
+                )}
+            </View>
         </View>
     );
 }
-
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: "#ffffff",
-        alignItems: "flex-start",
-        paddingHorizontal: 20,
-        justifyContent: "space-between",
-    },
-    title: {
-        fontSize: 24,
-        color: "#333",
-        marginTop: 40,
-        marginBottom: 30,
-        fontWeight: "bold",
-    },
-    description: {
-        fontSize: 16,
-        color: "#333",
-        marginBottom: 20,
-    },
-    inputContainer: {
-        flexDirection: "row",
-        alignItems: "center",
-        width: "100%",
-        height: 50,
-        borderRadius: 5,
-        marginBottom: 8,
-        paddingHorizontal: 15,
-        backgroundColor: "#f9f9f9",
-    },
-    inputError: {
-        borderColor: "red",
-        borderWidth: 1,
-    },
-    icon: {
-        width: 24,
-        height: 24,
-        marginRight: 10,
-    },
-    iconFaded: {
-        tintColor: "#a0a0a0",
-    },
-    input: {
-        flex: 1,
-        height: "100%",
-        fontSize: 16,
-    },
-    errorText: {
-        color: "red",
-        marginBottom: 16,
-        fontSize: 14,
-    },
-    button: {
-        backgroundColor: "#509b43",
-        width: "100%",
-        borderRadius: 5,
-        paddingVertical: 12,
-        paddingHorizontal: 20,
-        marginBottom: 20,
-        alignItems: "center",
-    },
-    buttonText: {
-        color: "#ffffff",
-        fontSize: 18,
-    },
-    bold: {
-        fontWeight: "bold",
-    },
-    noteText: {
-        color: "#a0a0a0",
-        textAlign: "center",
-    },
-});
