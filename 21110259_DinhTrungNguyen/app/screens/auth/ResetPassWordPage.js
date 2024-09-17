@@ -1,16 +1,33 @@
 import React, { useState } from "react";
 import { ActivityIndicator, StyleSheet, Text, TextInput, View, Alert, TouchableOpacity } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
+import { StatusBar } from "expo-status-bar";
+import Toast from "react-native-toast-message";
+
 import { resetPassword, sendOtp } from "../../services/AuthAPIService";
 
 export default function ResetPassWordPage({ navigation, route }) {
     const { email } = route.params;
+
     const [otp, setOtp] = useState("");
     const [loading, setLoading] = useState(false);
     const [newPassword, setNewPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
     const [showPassword, setShowPassword] = useState(false);
     const [showConfirmPass, setShowConfirmPass] = useState(false);
+
+    const showToast = (type, text1, text2) => {
+        Toast.show({
+            type: type,
+            text1: text1,
+            text2: text2,
+            position: "bottom",
+            bottomOffset: 80,
+            visibilityTime: 3000,
+            text1Style: { fontSize: 16, fontWeight: "bold" },
+            text2Style: { fontSize: 12 },
+        });
+    };
 
     const handleSendOtp = async () => {
         setLoading(true);
@@ -19,9 +36,9 @@ export default function ResetPassWordPage({ navigation, route }) {
             const data = await sendOtp(email);
 
             if (data.success) {
-                Alert.alert("Success", data.message);
+                showToast("success", "Success", data.message);
             } else {
-                Alert.alert("Error", data.message);
+                showToast("error", "Error", data.message);
             }
         } catch (error) {
             Alert.alert("Error", "An error occurred. Please try again.");
@@ -44,10 +61,10 @@ export default function ResetPassWordPage({ navigation, route }) {
             const data = await resetPassword(email, newPassword, otp);
 
             if (data.success) {
-                Alert.alert("Thành công", data.message);
+                showToast("success", "Success", data.message);
                 navigation.navigate("Login");
             } else {
-                Alert.alert("Lỗi", data.message);
+                showToast("error", "Error", data.message);
             }
         } catch (error) {
             Alert.alert("Lỗi", "Đã xảy ra lỗi. Hãy thử lại.");
@@ -56,6 +73,43 @@ export default function ResetPassWordPage({ navigation, route }) {
 
     return (
         <View style={styles.container}>
+            <StatusBar style="auto" />
+
+            {loading && (
+                <View
+                    style={{
+                        position: "absolute",
+                        top: 0,
+                        left: 0,
+                        right: 0,
+                        bottom: 0,
+                        backgroundColor: "rgba(0, 0, 0, 0.1)", // Làm mờ phần nền xung quanh một chút
+                        justifyContent: "center",
+                        alignItems: "center",
+                        zIndex: 10,
+                    }}
+                >
+                    {/* Hình vuông chứa ActivityIndicator */}
+                    <View
+                        style={{
+                            width: 68, // Kích thước của hình vuông
+                            height: 68,
+                            backgroundColor: "#fff", // Màu nền trắng cho hình vuông
+                            borderRadius: 10, // Bo góc cho hình vuông
+                            justifyContent: "center",
+                            alignItems: "center",
+                            shadowColor: "#000",
+                            shadowOffset: { width: 0, height: 2 },
+                            shadowOpacity: 0.8,
+                            shadowRadius: 2,
+                            elevation: 5, // Hiệu ứng đổ bóng cho Android
+                        }}
+                    >
+                        <ActivityIndicator size="large" color="#6dcf5b" />
+                    </View>
+                </View>
+            )}
+
             <View>
                 <Text style={styles.title}>Đặt lại mật khẩu</Text>
                 <Text style={styles.description}>
@@ -119,7 +173,6 @@ export default function ResetPassWordPage({ navigation, route }) {
 
                 <View>
                     <Text style={styles.noteText}>Mã xác nhận hết hạn sau 5 phút kể từ khi bạn nhận được mã.</Text>
-                    {loading && <ActivityIndicator size="large" color="#0000ff" style={styles.loading} />}
                 </View>
             </View>
             <TouchableOpacity style={styles.button} onPress={handleResetPassword}>

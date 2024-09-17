@@ -106,6 +106,14 @@ export default function LoginPage({ navigation }) {
             </View>
 
             <View style={styles.hr} />
+
+            <TouchableOpacity
+                onPress={() => {
+                    navigation.navigate("Home");
+                }}
+            >
+                <Text className="text-sm font-bold text-[#509b43] mb-5">Trải nghiệm không cần đăng nhập</Text>
+            </TouchableOpacity>
         </View>
     );
 }
@@ -196,13 +204,13 @@ const styles = StyleSheet.create({
     },
     footer: {
         alignItems: "center",
-        marginBottom: 20,
+        marginBottom: 10,
         marginVertical: 10,
     },
     hr: {
         width: "80%",
         height: 1,
         backgroundColor: "#ccc",
-        marginBottom: 40,
+        marginBottom: 10,
     },
 });

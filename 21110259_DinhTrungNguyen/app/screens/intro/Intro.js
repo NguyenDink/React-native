@@ -23,7 +23,7 @@ export default function Intro({ navigation }) {
 
         const timer = setTimeout(() => {
             checkToken();
-        }, 2000);
+        }, 1200);
 
         return () => clearTimeout(timer);
     }, [navigation]);
