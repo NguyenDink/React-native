@@ -49,7 +49,4 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         marginBottom: 20,
     },
-    textName: {
-        fontSize: 24,
-    },
 });
