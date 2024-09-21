@@ -1,8 +1,11 @@
 import React, { useState } from "react";
-import { Alert, StyleSheet, Text, TextInput, TouchableOpacity, Image, View, Switch } from "react-native";
+import { Alert, Text, TextInput, TouchableOpacity, Image, View, Switch } from "react-native";
 import { register } from "../../services/AuthAPIService";
 import logo from "../../assets/logo.png";
-import Icon from "react-native-vector-icons/Ionicons";
+import { Ionicons } from "@expo/vector-icons";
+
+const emailRegex =
+    /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
 export default function RegisterPage({ navigation }) {
     const [email, setEmail] = useState("");
@@ -13,25 +16,58 @@ export default function RegisterPage({ navigation }) {
     const [showConfirmPass, setShowConfirmPass] = useState(false);
     const [isChecked, setIsChecked] = useState(false);
 
+    const [emailError, setEmailError] = useState("");
+    const [fullNameError, setFullNameError] = useState("");
+    const [passwordError, setPasswordError] = useState("");
+    const [confirmPasswordError, setConfirmPasswordError] = useState("");
+
+    const validateInputs = () => {
+        let valid = true;
+
+        if (!fullName) {
+            setFullNameError("Họ và tên không được để trống");
+            valid = false;
+        } else {
+            setFullNameError("");
+        }
+
+        if (!email) {
+            setEmailError("Email không được để trống");
+            valid = false;
+        } else if (!emailRegex.test(email.toLowerCase())) {
+            setEmailError("Email không đúng định dạng");
+            valid = false;
+        } else {
+            setEmailError("");
+        }
+
+        if (!password) {
+            setPasswordError("Mật khẩu không được để trống");
+            valid = false;
+        } else {
+            setPasswordError("");
+        }
+
+        if (!confirmPassword) {
+            setConfirmPasswordError("Vui lòng nhập lại mật khẩu");
+            valid = false;
+        } else if (password !== confirmPassword) {
+            setConfirmPasswordError("Mật khẩu không trùng khớp");
+            valid = false;
+        } else {
+            setConfirmPasswordError("");
+        }
+
+        return valid;
+    };
+
     const handleRegister = async () => {
-        if (!email || !password || !confirmPassword) {
-            Alert.alert("Lỗi", "Vui lòng điền đầy đủ thông tin");
-            return;
-        }
-
-        if (password !== confirmPassword) {
-            Alert.alert("Lỗi", "Mật khẩu không trùng khớp");
-            return;
-        }
-
-        if (!isChecked) {
-            Alert.alert("Lỗi", "Vui lòng đồng ý với điều khoản dịch vụ và chính sách bảo mật để tiếp tục.");
+        if (!validateInputs()) {
             return;
         }
 
         try {
             const data = await register(email, fullName, password);
-
             if (data.success) {
                 Alert.alert("Đăng ký thành công", data.message);
                 navigation.navigate("Login");
@@ -44,199 +80,139 @@ export default function RegisterPage({ navigation }) {
     };
 
     return (
-        <View style={styles.container}>
-            <Image source={logo} style={styles.image} />
-            <Text style={styles.description}>Chào mừng bạn đến với JOB PORTAL</Text>
+        <View className="flex-1 bg-white items-center px-7 justify-between">
+            <Image source={logo} className="w-40 h-40 rounded-full mt-6" />
+            <Text className="text-lg text-gray-800 mb-8 text-center">Chào mừng bạn đến với JOB PORTAL</Text>
 
-            <Text style={styles.title}>Đăng ký tài khoản</Text>
+            <Text className="text-2xl text-gray-800 mb-2 text-center">Đăng ký tài khoản</Text>
 
-            <View style={styles.inputContainer}>
-                <Icon name="person-outline" size={24} color="#a0a0a0" style={styles.icon} />
-                <TextInput
-                    style={styles.input}
-                    placeholder="Họ và tên"
-                    placeholderTextColor="#a0a0a0"
-                    value={fullName}
-                    onChangeText={setFullName}
-                />
-            </View>
-
-            <View style={styles.inputContainer}>
-                <Icon name="mail-outline" size={24} color="#a0a0a0" style={styles.icon} />
-                <TextInput
-                    style={styles.input}
-                    placeholder="Email"
-                    placeholderTextColor="#a0a0a0"
-                    value={email}
-                    onChangeText={setEmail}
-                />
-            </View>
-
-            <View style={styles.inputContainer}>
-                <Icon name="lock-closed-outline" size={24} color="#a0a0a0" style={styles.icon} />
-                <TextInput
-                    style={styles.input}
-                    placeholder="Mật khẩu"
-                    secureTextEntry={!showPassword}
-                    placeholderTextColor="#a0a0a0"
-                    value={password}
-                    onChangeText={setPassword}
-                />
-                <TouchableOpacity onPress={() => setShowPassword(!showPassword)}>
-                    <Icon
-                        name={showPassword ? "eye-off-outline" : "eye-outline"}
-                        size={24}
-                        color="#a0a0a0"
-                        style={styles.icon}
+            {/* Input Họ và tên */}
+            <View className="w-full">
+                <View
+                    className={`flex-row items-center w-full h-12 rounded-full px-4 bg-gray-100 ${
+                        fullNameError ? "border-2 border-red-400" : ""
+                    }`}
+                >
+                    <Ionicons name="person-outline" size={24} color="#a0a0a0" />
+                    <TextInput
+                        className="flex-1 h-full text-base text-gray-700 ml-2"
+                        placeholder="Họ và tên"
+                        placeholderTextColor="#a0a0a0"
+                        value={fullName}
+                        onChangeText={setFullName}
                     />
-                </TouchableOpacity>
+                </View>
+                {fullNameError ? <Text className="text-red-500 text-sm">{fullNameError}</Text> : null}
             </View>
 
-            <View style={styles.inputContainer}>
-                <Icon name="lock-closed-outline" size={24} color="#a0a0a0" style={styles.icon} />
-                <TextInput
-                    style={styles.input}
-                    placeholder="Nhập lại mật khẩu"
-                    secureTextEntry={!showConfirmPass}
-                    placeholderTextColor="#a0a0a0"
-                    value={confirmPassword}
-                    onChangeText={setConfirmPassword}
-                />
-                <TouchableOpacity onPress={() => setShowConfirmPass(!showConfirmPass)}>
-                    <Icon
-                        name={showConfirmPass ? "eye-off-outline" : "eye-outline"}
-                        size={24}
-                        color="#a0a0a0"
-                        style={styles.icon}
+            {/* Input Email */}
+            <View className="w-full">
+                <View
+                    className={`flex-row items-center w-full h-12 rounded-full px-4 bg-gray-100 ${
+                        emailError ? "border-2 border-red-400" : ""
+                    }`}
+                >
+                    <Ionicons name="mail-outline" size={24} color="#a0a0a0" />
+                    <TextInput
+                        className="flex-1 h-full text-base text-gray-700 ml-2"
+                        placeholder="Email"
+                        placeholderTextColor="#a0a0a0"
+                        value={email}
+                        onChangeText={setEmail}
                     />
-                </TouchableOpacity>
+                </View>
+                {emailError ? <Text className="text-red-500 text-sm">{emailError}</Text> : null}
             </View>
 
-            <View style={styles.switchContainer}>
+            {/* Input Mật khẩu */}
+            <View className="w-full">
+                <View
+                    className={`flex-row items-center w-full h-12 rounded-full px-4 bg-gray-100 ${
+                        passwordError ? "border-2 border-red-400" : ""
+                    }`}
+                >
+                    <Ionicons name="lock-closed-outline" size={24} color="#a0a0a0" />
+                    <TextInput
+                        className="flex-1 h-full text-base text-gray-700 ml-2"
+                        placeholder="Mật khẩu"
+                        secureTextEntry={!showPassword}
+                        placeholderTextColor="#a0a0a0"
+                        value={password}
+                        onChangeText={setPassword}
+                    />
+                    <TouchableOpacity onPress={() => setShowPassword(!showPassword)}>
+                        <Ionicons name={showPassword ? "eye-off-outline" : "eye-outline"} size={24} color="#a0a0a0" />
+                    </TouchableOpacity>
+                </View>
+                {passwordError ? <Text className="text-red-500 text-sm">{passwordError}</Text> : null}
+            </View>
+
+            {/* Input Xác nhận mật khẩu */}
+            <View className="w-full">
+                <View
+                    className={`flex-row items-center w-full h-12 rounded-full px-4 bg-gray-100 ${
+                        confirmPasswordError ? "border-2 border-red-400" : ""
+                    }`}
+                >
+                    <Ionicons name="lock-closed-outline" size={24} color="#a0a0a0" />
+                    <TextInput
+                        className="flex-1 h-full text-base text-gray-700 ml-2"
+                        placeholder="Nhập lại mật khẩu"
+                        secureTextEntry={!showConfirmPass}
+                        placeholderTextColor="#a0a0a0"
+                        value={confirmPassword}
+                        onChangeText={setConfirmPassword}
+                    />
+                    <TouchableOpacity onPress={() => setShowConfirmPass(!showConfirmPass)}>
+                        <Ionicons
+                            name={showConfirmPass ? "eye-off-outline" : "eye-outline"}
+                            size={24}
+                            color="#a0a0a0"
+                        />
+                    </TouchableOpacity>
+                </View>
+                {confirmPasswordError ? <Text className="text-red-500 text-sm">{confirmPasswordError}</Text> : null}
+            </View>
+
+            <View className="flex-row items-center mb-8 px-6">
                 <Switch
                     value={isChecked}
                     onValueChange={setIsChecked}
                     trackColor={{ false: "#a0a0a0", true: "#509b43" }}
                     thumbColor="#ffffff"
                 />
-                <Text style={styles.switchText}>
-                    Tôi đã đọc và đồng ý với <Text style={styles.switchTextLink}>điều khoản dịch vụ</Text> và{" "}
-                    <Text style={styles.switchTextLink}>chính sách bảo mật</Text> của qnspJob.
+                <Text className="text-gray-800">
+                    Tôi đã đọc và đồng ý với <Text className="text-green-600">điều khoản dịch vụ</Text> và{" "}
+                    <Text className="text-green-600">chính sách bảo mật</Text> của qnspJob.
                 </Text>
             </View>
 
-            <TouchableOpacity style={styles.button} onPress={handleRegister}>
-                <Text style={styles.buttonText}>Đăng ký</Text>
-            </TouchableOpacity>
-
-            <TouchableOpacity style={styles.footer} onPress={() => navigation.navigate("Login")}>
-                <Text style={styles.text}>
-                    Bạn đã có tài khoản? <Text style={styles.link}>Đăng nhập ngay</Text>
-                </Text>
-            </TouchableOpacity>
-
-            <View style={styles.hr} />
-
             <TouchableOpacity
-                onPress={() => {
-                    navigation.navigate("Home");
-                }}
+                className={`w-full rounded-full py-3 mb-10 items-center ${isChecked ? "bg-green-600" : "bg-gray-400"}`}
+                onPress={handleRegister}
+                disabled={!isChecked}
             >
-                <Text className="text-sm font-bold text-[#509b43] mb-5">Trải nghiệm không cần đăng nhập</Text>
+                <Text className="text-white text-lg">Đăng ký</Text>
             </TouchableOpacity>
+
+            <View className="w-full">
+                <View className="items-center mb-2">
+                    <Text className="text-gray-800">
+                        Bạn đã có tài khoản?{" "}
+                        <Text className="text-green-600 font-bold" onPress={() => navigation.navigate("Login")}>
+                            Đăng nhập ngay
+                        </Text>
+                    </Text>
+                </View>
+
+                <View className="self-center w-4/5 h-px bg-gray-300 mb-2" />
+
+                <TouchableOpacity onPress={() => navigation.navigate("Home")}>
+                    <Text className="self-center text-sm font-bold text-green-600 mb-5">
+                        Trải nghiệm không cần đăng nhập
+                    </Text>
+                </TouchableOpacity>
+            </View>
         </View>
     );
 }
-
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: "#ffffff",
-        alignItems: "center",
-        paddingHorizontal: 28,
-        justifyContent: "space-between",
-    },
-    image: {
-        width: 140,
-        height: 140,
-        borderRadius: 100,
-        marginTop: 40,
-    },
-    description: {
-        fontSize: 18,
-        color: "#333",
-        marginBottom: 40,
-        textAlign: "center",
-    },
-    title: {
-        fontSize: 22,
-        color: "#333",
-        marginBottom: 20,
-        textAlign: "center",
-    },
-    inputContainer: {
-        flexDirection: "row",
-        alignItems: "center",
-        width: "100%",
-        height: 50,
-        borderRadius: 50,
-        marginBottom: 16,
-        paddingHorizontal: 15,
-        backgroundColor: "#f9f9f9",
-    },
-    icon: {
-        marginRight: 10,
-    },
-    input: {
-        flex: 1,
-        height: "100%",
-        fontSize: 16,
-    },
-    button: {
-        backgroundColor: "#509b43",
-        width: "100%",
-        borderRadius: 50,
-        paddingVertical: 15,
-        paddingHorizontal: 20,
-        marginBottom: 40,
-        alignItems: "center",
-    },
-    buttonText: {
-        color: "#ffffff",
-        fontSize: 18,
-    },
-    switchContainer: {
-        flexDirection: "row",
-        alignItems: "center",
-        marginBottom: 16,
-        paddingHorizontal: 24,
-    },
-    switchText: {
-        color: "#333",
-    },
-    switchTextLink: {
-        color: "#509b43",
-    },
-    text: {
-        color: "#333",
-        textAlign: "center",
-        fontSize: 14,
-    },
-    link: {
-        color: "#509b43",
-        textAlign: "right",
-        fontSize: 14,
-        fontWeight: "bold",
-    },
-    footer: {
-        alignItems: "center",
-        marginBottom: 10,
-        marginVertical: 10,
-    },
-    hr: {
-        width: "80%",
-        height: 1,
-        backgroundColor: "#ccc",
-        marginBottom: 10,
-    },
-});
