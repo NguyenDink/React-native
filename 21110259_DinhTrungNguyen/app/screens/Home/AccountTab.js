@@ -148,7 +148,7 @@ export default function AccountTab({ route, navigation }) {
                 <>
                     <View className="flex-row bg-white rounded-lg p-5 mx-5 mt-20" style={styles.shadowStyle}>
                         <View className="relative mr-5">
-                            <View className="w-24 h-24 rounded-full border-2 border-[#509b43] justify-center items-center">
+                            <View className="w-24 h-24 rounded-full border-2 border-green-600 justify-center items-center">
                                 <Ionicons name="person-outline" size={48} color="#509b43" />
                             </View>
                             <TouchableOpacity
@@ -161,7 +161,7 @@ export default function AccountTab({ route, navigation }) {
                         <View className="flex-1 justify-center">
                             <Text className="text-lg font-bold text-gray-800 mb-3 text-center">Vui lòng đăng nhập</Text>
                             <TouchableOpacity
-                                className="bg-[#509b43] p-3 rounded-lg justify-center items-center"
+                                className="bg-green-600 p-3 rounded-lg justify-center items-center"
                                 onPress={() => {
                                     navigation.navigate("Login");
                                 }}

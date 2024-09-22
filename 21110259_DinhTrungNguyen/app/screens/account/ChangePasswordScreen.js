@@ -128,12 +128,12 @@ export default function ChangePasswordScreen({ route, navigation }) {
 
             <View className="flex-row justify-between bg-white py-3 px-2">
                 <TouchableOpacity
-                    className="border border-[#509b43] rounded-full py-3 px-4 w-[49%]"
+                    className="border border-green-600 rounded-full py-3 px-4 w-[49%]"
                     onPress={handleCancel}
                 >
-                    <Text className="text-[#509b43] text-center font-bold text-base">Hủy</Text>
+                    <Text className="text-green-600 text-center font-bold text-base">Hủy</Text>
                 </TouchableOpacity>
-                <TouchableOpacity className="bg-[#509b43] rounded-full py-3 px-4 w-[49%]" onPress={handleResetPassword}>
+                <TouchableOpacity className="bg-green-600 rounded-full py-3 px-4 w-[49%]" onPress={handleResetPassword}>
                     <Text className="text-white text-center font-bold text-base">Lưu</Text>
                 </TouchableOpacity>
             </View>

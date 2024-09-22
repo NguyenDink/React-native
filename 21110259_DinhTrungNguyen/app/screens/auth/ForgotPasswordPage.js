@@ -88,7 +88,7 @@ export default function ForgotPassWordPage({ navigation }) {
                     <ActivityIndicator size="large" color="#0000ff" />
                 ) : (
                     <TouchableOpacity
-                        className="bg-[#509b43] w-full rounded-lg py-3 px-5"
+                        className="bg-green-600 w-full rounded-lg py-3 px-5"
                         onPress={handleResetPassword}
                     >
                         <Text className="text-white text-center text-lg">Tạo lại mật khẩu</Text>

@@ -47,7 +47,7 @@ function AppTabs() {
 
                     return <Ionicons name={iconName} size={size} color={color} />;
                 },
-                tabBarActiveTintColor: "#6dcf5b",
+                tabBarActiveTintColor: "#16a34a",
                 tabBarInactiveTintColor: "gray",
             })}
         >

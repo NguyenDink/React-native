@@ -19,7 +19,7 @@ export default function JobDetail({ route, navigation }) {
         <View className="flex-1 bg-gray-100">
             {/* Back Button */}
             <TouchableOpacity
-                className="absolute top-8 left-4 bg-[#509b43] p-3 rounded-full z-10"
+                className="absolute top-8 left-4 bg-green-600 p-3 rounded-full z-10"
                 onPress={() => navigation.goBack()}
             >
                 <Ionicons name="arrow-back" size={24} color="white" />
@@ -50,15 +50,15 @@ export default function JobDetail({ route, navigation }) {
                         <View className="flex-row justify-around w-full mt-4">
                             <View className="items-center">
                                 <Text className="text-sm font-bold text-gray-600">Mức lương</Text>
-                                <Text className="text-base text-[#509b43] mt-1">{job.salary}</Text>
+                                <Text className="text-base text-green-600 mt-1">{job.salary}</Text>
                             </View>
                             <View className="items-center">
                                 <Text className="text-sm font-bold text-gray-600">Địa chỉ</Text>
-                                <Text className="text-base text-[#509b43] mt-1">{job.address}</Text>
+                                <Text className="text-base text-green-600 mt-1">{job.address}</Text>
                             </View>
                             <View className="items-center">
                                 <Text className="text-sm font-bold text-gray-600">Kinh nghiệm</Text>
-                                <Text className="text-base text-[#509b43] mt-1">{job.experience}</Text>
+                                <Text className="text-base text-green-600 mt-1">{job.experience}</Text>
                             </View>
                         </View>
                     </View>
@@ -104,7 +104,7 @@ export default function JobDetail({ route, navigation }) {
 
             {/* Apply Button */}
             <View className="absolute bottom-0 left-0 right-0 bg-white p-1 border-t border-gray-200">
-                <TouchableOpacity className="bg-[#509b43] py-3 rounded-lg items-center">
+                <TouchableOpacity className="bg-green-600 py-3 rounded-lg items-center">
                     <Text className="text-white text-lg font-bold">Ứng tuyển ngay</Text>
                 </TouchableOpacity>
             </View>
