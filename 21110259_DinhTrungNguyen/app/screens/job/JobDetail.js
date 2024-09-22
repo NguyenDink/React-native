@@ -18,10 +18,7 @@ export default function JobDetail({ route, navigation }) {
     return (
         <View className="flex-1 bg-gray-100">
             {/* Back Button */}
-            <TouchableOpacity
-                className="absolute top-8 left-4 bg-green-600 p-3 rounded-full z-10"
-                onPress={() => navigation.goBack()}
-            >
+            <TouchableOpacity className="absolute top-8 left-4 bg-green-600 p-3 rounded-full z-10" onPress={handleBack}>
                 <Ionicons name="arrow-back" size={24} color="white" />
             </TouchableOpacity>
 

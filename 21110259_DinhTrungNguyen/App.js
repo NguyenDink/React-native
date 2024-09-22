@@ -20,6 +20,8 @@ import ChangePasswordScreen from "./app/screens/account/ChangePasswordScreen";
 import PersonalInfoScreen from "./app/screens/account/PersonalInfoScreen";
 import ActivateAccount from "./app/screens/account/ActivateAccount";
 import JobDetail from "./app/screens/job/JobDetail";
+import Search from "./app/screens/job/Search";
+import JobList from "./app/screens/job/JobList";
 
 const Stack = createStackNavigator();
 
@@ -96,6 +98,12 @@ export default function App() {
                     options={{ headerShown: true, headerTitle: "Thông tin tài khoản", headerTitleAlign: "center" }}
                 />
                 <Stack.Screen name="ActivateAccount" component={ActivateAccount} />
+                <Stack.Screen name="Search" component={Search} />
+                <Stack.Screen
+                    name="JobList"
+                    component={JobList}
+                    options={{ headerShown: true, headerTitle: "Việc làm tốt nhất" }}
+                />
                 <Stack.Screen name="JobDetail" component={JobDetail} />
                 <Stack.Screen name="Home" component={AppTabs} />
             </Stack.Navigator>
