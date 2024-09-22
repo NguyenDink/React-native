@@ -65,7 +65,7 @@ export default function HomeTab({ navigation }) {
                 </View>
 
                 <View className="flex-row space-x-2 mb-2">
-                    <Text className="text-sm text-[#509b43] bg-[#e8f5e9] py-1 px-2 rounded-md">{item.salary}</Text>
+                    <Text className="text-sm text-green-600 bg-[#e8f5e9] py-1 px-2 rounded-md">{item.salary}</Text>
                 </View>
             </View>
         </TouchableOpacity>
@@ -91,6 +91,16 @@ export default function HomeTab({ navigation }) {
                     onChangeText={(text) => setSearch(text)}
                 />
             </View>
+
+            {/* Header with "Việc làm tốt nhất" and "Xem tất cả" */}
+            {search === "" && (
+                <View className="flex-row justify-between items-center px-4 mb-2">
+                    <Text className="text-lg font-bold text-gray-800">Việc làm tốt nhất</Text>
+                    <TouchableOpacity onPress={() => navigation.navigate("AllJobs")}>
+                        <Text className="text-green-600 font-bold text-base">Xem tất cả</Text>
+                    </TouchableOpacity>
+                </View>
+            )}
 
             {/* Job list */}
             <FlatList

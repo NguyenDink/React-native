@@ -90,7 +90,7 @@ export default function RegisterPage({ navigation }) {
             <View className="w-full">
                 <View
                     className={`flex-row items-center w-full h-12 rounded-full px-4 bg-gray-100 ${
-                        fullNameError ? "border-2 border-red-400" : ""
+                        fullNameError ? "border border-red-500" : ""
                     }`}
                 >
                     <Ionicons name="person-outline" size={24} color="#a0a0a0" />
@@ -102,14 +102,14 @@ export default function RegisterPage({ navigation }) {
                         onChangeText={setFullName}
                     />
                 </View>
-                {fullNameError ? <Text className="text-red-500 text-sm">{fullNameError}</Text> : null}
+                {fullNameError ? <Text className="text-red-500 text-sm px-5">{fullNameError}</Text> : null}
             </View>
 
             {/* Input Email */}
             <View className="w-full">
                 <View
                     className={`flex-row items-center w-full h-12 rounded-full px-4 bg-gray-100 ${
-                        emailError ? "border-2 border-red-400" : ""
+                        emailError ? "border border-red-500" : ""
                     }`}
                 >
                     <Ionicons name="mail-outline" size={24} color="#a0a0a0" />
@@ -121,14 +121,14 @@ export default function RegisterPage({ navigation }) {
                         onChangeText={setEmail}
                     />
                 </View>
-                {emailError ? <Text className="text-red-500 text-sm">{emailError}</Text> : null}
+                {emailError ? <Text className="text-red-500 text-sm px-5">{emailError}</Text> : null}
             </View>
 
             {/* Input Mật khẩu */}
             <View className="w-full">
                 <View
                     className={`flex-row items-center w-full h-12 rounded-full px-4 bg-gray-100 ${
-                        passwordError ? "border-2 border-red-400" : ""
+                        passwordError ? "border border-red-500" : ""
                     }`}
                 >
                     <Ionicons name="lock-closed-outline" size={24} color="#a0a0a0" />
@@ -144,14 +144,14 @@ export default function RegisterPage({ navigation }) {
                         <Ionicons name={showPassword ? "eye-off-outline" : "eye-outline"} size={24} color="#a0a0a0" />
                     </TouchableOpacity>
                 </View>
-                {passwordError ? <Text className="text-red-500 text-sm">{passwordError}</Text> : null}
+                {passwordError ? <Text className="text-red-500 text-sm px-5">{passwordError}</Text> : null}
             </View>
 
             {/* Input Xác nhận mật khẩu */}
             <View className="w-full">
                 <View
                     className={`flex-row items-center w-full h-12 rounded-full px-4 bg-gray-100 ${
-                        confirmPasswordError ? "border-2 border-red-400" : ""
+                        confirmPasswordError ? "border border-red-500" : ""
                     }`}
                 >
                     <Ionicons name="lock-closed-outline" size={24} color="#a0a0a0" />
@@ -171,7 +171,9 @@ export default function RegisterPage({ navigation }) {
                         />
                     </TouchableOpacity>
                 </View>
-                {confirmPasswordError ? <Text className="text-red-500 text-sm">{confirmPasswordError}</Text> : null}
+                {confirmPasswordError ? (
+                    <Text className="text-red-500 text-sm px-5">{confirmPasswordError}</Text>
+                ) : null}
             </View>
 
             <View className="flex-row items-center mb-8 px-6">
@@ -188,7 +190,7 @@ export default function RegisterPage({ navigation }) {
             </View>
 
             <TouchableOpacity
-                className={`w-full rounded-full py-3 mb-10 items-center ${isChecked ? "bg-green-600" : "bg-gray-400"}`}
+                className={`w-full rounded-full py-3 mb-9 items-center ${isChecked ? "bg-green-600" : "bg-gray-400"}`}
                 onPress={handleRegister}
                 disabled={!isChecked}
             >
@@ -196,7 +198,7 @@ export default function RegisterPage({ navigation }) {
             </TouchableOpacity>
 
             <View className="w-full">
-                <View className="items-center mb-2">
+                <View className="items-center mb-3">
                     <Text className="text-gray-800">
                         Bạn đã có tài khoản?{" "}
                         <Text className="text-green-600 font-bold" onPress={() => navigation.navigate("Login")}>

@@ -73,7 +73,7 @@ export default function LoginPage({ navigation }) {
             <View className="w-full">
                 <View
                     className={`flex-row items-center w-full h-14 rounded-full mb-1 px-4 bg-gray-100 ${
-                        emailError ? "border-2 border-red-400" : ""
+                        emailError ? "border border-red-500" : ""
                     }`}
                 >
                     <Ionicons name="mail-outline" size={24} color="#a0a0a0" />
@@ -86,14 +86,14 @@ export default function LoginPage({ navigation }) {
                     />
                 </View>
                 {/* Hiển thị lỗi Email */}
-                {emailError ? <Text className="text-red-500 text-sm">{emailError}</Text> : null}
+                {emailError ? <Text className="text-red-500 text-sm px-5">{emailError}</Text> : null}
             </View>
 
             {/* Input Mật khẩu */}
             <View className="w-full">
                 <View
                     className={`flex-row items-center w-full h-14 rounded-full mb-1 px-4 bg-gray-100 ${
-                        passwordError ? "border-2 border-red-400" : ""
+                        passwordError ? "border border-red-500" : ""
                     }`}
                 >
                     <Ionicons name="lock-closed-outline" size={24} color="#a0a0a0" />
@@ -110,7 +110,7 @@ export default function LoginPage({ navigation }) {
                     </TouchableOpacity>
                 </View>
                 {/* Hiển thị lỗi Mật khẩu */}
-                {passwordError ? <Text className="text-red-500 text-sm">{passwordError}</Text> : null}
+                {passwordError ? <Text className="text-red-500 text-sm px-5">{passwordError}</Text> : null}
             </View>
 
             <TouchableOpacity onPress={() => navigation.navigate("ForgotPassWord")} className="self-end mb-8">
@@ -143,7 +143,7 @@ export default function LoginPage({ navigation }) {
 
             {/* Điều hướng */}
             <View className="w-full">
-                <View className="items-center mb-2">
+                <View className="items-center mb-3">
                     <Text className="text-gray-800">
                         Bạn chưa có tài khoản?{" "}
                         <Text className="text-green-600 font-bold" onPress={() => navigation.navigate("Register")}>
