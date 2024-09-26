@@ -42,7 +42,7 @@ export default function HomeTab({ navigation }) {
     const JobItem = ({ item }) => (
         <TouchableOpacity
             className="flex-row bg-white p-4 rounded-lg mb-4 shadow-sm"
-            onPress={() => navigation.navigate("JobDetail", { job: item })}
+            onPress={() => navigation.navigate("Job", { screen: "JobDetail", params: { job: item } })}
         >
             <Image source={{ uri: item.logo }} className="w-16 h-16 rounded-lg mr-4" />
             <View className="flex-1">
@@ -79,7 +79,7 @@ export default function HomeTab({ navigation }) {
             {/* Search bar */}
             <View className="flex-row items-center bg-white rounded-lg py-3 px-4 mx-3 mt-8 mb-4 shadow-sm">
                 <Ionicons name="search" size={24} color="#888" className="mr-3" />
-                <TouchableOpacity className="flex-1" onPress={() => navigation.navigate("Search")}>
+                <TouchableOpacity className="flex-1" onPress={() => navigation.navigate("Job", { screen: "Search" })}>
                     <TextInput
                         className="text-base text-gray-700"
                         placeholder="Tìm kiếm công việc"
@@ -91,7 +91,7 @@ export default function HomeTab({ navigation }) {
             {/* Header with "Việc làm tốt nhất" and "Xem tất cả" */}
             <View className="flex-row justify-between items-center px-4 mb-2">
                 <Text className="text-lg font-bold text-gray-800">Việc làm tốt nhất</Text>
-                <TouchableOpacity onPress={() => navigation.navigate("JobList")}>
+                <TouchableOpacity onPress={() => navigation.navigate("Job", { screen: "JobList" })}>
                     <Text className="text-green-600 font-bold text-base">Xem tất cả</Text>
                 </TouchableOpacity>
             </View>

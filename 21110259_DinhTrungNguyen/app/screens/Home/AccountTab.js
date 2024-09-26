@@ -6,10 +6,9 @@ import Octicons from "@expo/vector-icons/Octicons";
 
 import { logout } from "../../services/AuthAPIService";
 import { myInfo } from "../../services/UsersAPIService";
-
 import { getToken, deleteToken } from "../../utils/AuthStorage";
 
-export default function AccountTab({ route, navigation }) {
+export default function AccountTab({ navigation }) {
     const [loading, setLoading] = useState(true);
     const [userInfo, setUserInfo] = useState(null);
     const [avatar, setAvatar] = useState(
@@ -38,7 +37,7 @@ export default function AccountTab({ route, navigation }) {
     useFocusEffect(
         useCallback(() => {
             fetchUserInfo();
-        }, [])
+        }, [fetchUserInfo])
     );
 
     const handleLogout = async () => {
@@ -46,9 +45,8 @@ export default function AccountTab({ route, navigation }) {
             const token = await getToken();
             if (token) {
                 const data = await logout(token);
-
                 if (data.success) {
-                    navigation.navigate("Start");
+                    navigation.navigate("Start"); // Quay lại trang bắt đầu
                     Alert.alert("Thành công", data.message);
                     deleteToken();
                 }
@@ -104,9 +102,13 @@ export default function AccountTab({ route, navigation }) {
                                 </View>
                             ) : (
                                 <TouchableOpacity
-                                    onPress={() => {
-                                        navigation.navigate("ActivateAccount", { email: userInfo.email });
-                                    }}
+                                    // Điều hướng tới ActivateAccount qua AccountNavigator
+                                    onPress={() =>
+                                        navigation.navigate("Account", {
+                                            screen: "ActivateAccount",
+                                            params: { email: userInfo.email },
+                                        })
+                                    }
                                 >
                                     <View className="flex-row items-center mt-2">
                                         <Octicons name="shield-x" size={20} color="red" style={{ marginRight: 4 }} />
@@ -122,7 +124,10 @@ export default function AccountTab({ route, navigation }) {
                         <TouchableOpacity
                             className="bg-white p-3 rounded-lg mb-4"
                             style={styles.shadowStyle}
-                            onPress={() => navigation.navigate("PersonalInfo", { user: userInfo })}
+                            // Điều hướng tới PersonalInfo qua AccountNavigator
+                            onPress={() =>
+                                navigation.navigate("Account", { screen: "PersonalInfo", params: { user: userInfo } })
+                            }
                         >
                             <Text className="text-lg font-medium text-gray-800">Thông tin cá nhân</Text>
                         </TouchableOpacity>
@@ -130,7 +135,10 @@ export default function AccountTab({ route, navigation }) {
                         <TouchableOpacity
                             className="bg-white p-3 rounded-lg mb-4"
                             style={styles.shadowStyle}
-                            onPress={() => navigation.navigate("ChangePassword", { user: userInfo })}
+                            // Điều hướng tới ChangePassword qua AccountNavigator
+                            onPress={() =>
+                                navigation.navigate("Account", { screen: "ChangePassword", params: { user: userInfo } })
+                            }
                         >
                             <Text className="text-lg font-medium text-gray-800">Đổi mật khẩu</Text>
                         </TouchableOpacity>
@@ -162,8 +170,9 @@ export default function AccountTab({ route, navigation }) {
                             <Text className="text-lg font-bold text-gray-800 mb-3 text-center">Vui lòng đăng nhập</Text>
                             <TouchableOpacity
                                 className="bg-green-600 p-3 rounded-lg justify-center items-center"
+                                // Điều hướng tới Login qua AuthNavigator
                                 onPress={() => {
-                                    navigation.navigate("Login");
+                                    navigation.navigate("Auth", { screen: "Login" });
                                 }}
                             >
                                 <Text className="text-lg font-medium text-white">Đăng nhập</Text>

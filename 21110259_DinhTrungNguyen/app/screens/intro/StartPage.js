@@ -8,13 +8,15 @@ export default function StartPage({ navigation }) {
                 Chào mừng đến với <Text style={[styles.welcome, styles.title]}> qnspJob!</Text>
             </Text>
 
-            <TouchableOpacity style={styles.button} onPress={() => navigation.navigate("Login")}>
+            {/* Điều hướng tới Login thông qua AuthNavigator */}
+            <TouchableOpacity style={styles.button} onPress={() => navigation.navigate("Auth", { screen: "Login" })}>
                 <Text style={styles.buttonText}>Đăng nhập</Text>
             </TouchableOpacity>
 
+            {/* Điều hướng tới Register thông qua AuthNavigator */}
             <TouchableOpacity
                 style={[styles.button, styles.registerButton]}
-                onPress={() => navigation.navigate("Register")}
+                onPress={() => navigation.navigate("Auth", { screen: "Register" })}
             >
                 <Text style={styles.buttonText}>Đăng ký tài khoản</Text>
             </TouchableOpacity>
