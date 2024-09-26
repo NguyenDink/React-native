@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Alert, Text, TextInput, TouchableOpacity, Image, View, Switch } from "react-native";
 import { register } from "../../services/AuthAPIService";
 import logo from "../../assets/logo.png";
-import { Ionicons } from "@expo/vector-icons";
+import InputField from "../../components/InputField";
 
 const emailRegex =
     /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -24,6 +24,7 @@ export default function RegisterPage({ navigation }) {
     const validateInputs = () => {
         let valid = true;
 
+        // Validate Full Name
         if (!fullName) {
             setFullNameError("Họ và tên không được để trống");
             valid = false;
@@ -31,6 +32,7 @@ export default function RegisterPage({ navigation }) {
             setFullNameError("");
         }
 
+        // Validate Email
         if (!email) {
             setEmailError("Email không được để trống");
             valid = false;
@@ -41,6 +43,7 @@ export default function RegisterPage({ navigation }) {
             setEmailError("");
         }
 
+        // Validate Password
         if (!password) {
             setPasswordError("Mật khẩu không được để trống");
             valid = false;
@@ -48,6 +51,7 @@ export default function RegisterPage({ navigation }) {
             setPasswordError("");
         }
 
+        // Validate Confirm Password
         if (!confirmPassword) {
             setConfirmPasswordError("Vui lòng nhập lại mật khẩu");
             valid = false;
@@ -82,101 +86,47 @@ export default function RegisterPage({ navigation }) {
     return (
         <View className="flex-1 bg-white items-center px-7 justify-between">
             <Image source={logo} className="w-40 h-40 rounded-full mt-6" />
-            <Text className="text-lg text-gray-800 mb-8 text-center">Chào mừng bạn đến với JOB PORTAL</Text>
-
+            <Text className="text-lg text-gray-800 mb-5 text-center">Chào mừng bạn đến với JOB PORTAL</Text>
             <Text className="text-2xl text-gray-800 mb-2 text-center">Đăng ký tài khoản</Text>
 
-            {/* Input Họ và tên */}
-            <View className="w-full">
-                <View
-                    className={`flex-row items-center w-full h-12 rounded-full px-4 bg-gray-100 ${
-                        fullNameError ? "border border-red-500" : ""
-                    }`}
-                >
-                    <Ionicons name="person-outline" size={24} color="#a0a0a0" />
-                    <TextInput
-                        className="flex-1 h-full text-base text-gray-700 ml-2"
-                        placeholder="Họ và tên"
-                        placeholderTextColor="#a0a0a0"
-                        value={fullName}
-                        onChangeText={setFullName}
-                    />
-                </View>
-                {fullNameError ? <Text className="text-red-500 text-sm px-5">{fullNameError}</Text> : null}
-            </View>
+            {/* Input Fields */}
+            <InputField
+                icon="person-outline"
+                placeholder="Họ và tên"
+                value={fullName}
+                onChangeText={setFullName}
+                error={fullNameError}
+            />
+            <InputField
+                icon="mail-outline"
+                placeholder="Email"
+                value={email}
+                onChangeText={setEmail}
+                error={emailError}
+            />
+            <InputField
+                icon="lock-closed-outline"
+                placeholder="Mật khẩu"
+                value={password}
+                onChangeText={setPassword}
+                secureTextEntry={!showPassword}
+                togglePasswordVisibility={() => setShowPassword(!showPassword)}
+                showPassword={showPassword}
+                error={passwordError}
+            />
+            <InputField
+                icon="lock-closed-outline"
+                placeholder="Nhập lại mật khẩu"
+                value={confirmPassword}
+                onChangeText={setConfirmPassword}
+                secureTextEntry={!showConfirmPass}
+                togglePasswordVisibility={() => setShowConfirmPass(!showConfirmPass)}
+                showPassword={showConfirmPass}
+                error={confirmPasswordError}
+            />
 
-            {/* Input Email */}
-            <View className="w-full">
-                <View
-                    className={`flex-row items-center w-full h-12 rounded-full px-4 bg-gray-100 ${
-                        emailError ? "border border-red-500" : ""
-                    }`}
-                >
-                    <Ionicons name="mail-outline" size={24} color="#a0a0a0" />
-                    <TextInput
-                        className="flex-1 h-full text-base text-gray-700 ml-2"
-                        placeholder="Email"
-                        placeholderTextColor="#a0a0a0"
-                        value={email}
-                        onChangeText={setEmail}
-                    />
-                </View>
-                {emailError ? <Text className="text-red-500 text-sm px-5">{emailError}</Text> : null}
-            </View>
-
-            {/* Input Mật khẩu */}
-            <View className="w-full">
-                <View
-                    className={`flex-row items-center w-full h-12 rounded-full px-4 bg-gray-100 ${
-                        passwordError ? "border border-red-500" : ""
-                    }`}
-                >
-                    <Ionicons name="lock-closed-outline" size={24} color="#a0a0a0" />
-                    <TextInput
-                        className="flex-1 h-full text-base text-gray-700 ml-2"
-                        placeholder="Mật khẩu"
-                        secureTextEntry={!showPassword}
-                        placeholderTextColor="#a0a0a0"
-                        value={password}
-                        onChangeText={setPassword}
-                    />
-                    <TouchableOpacity onPress={() => setShowPassword(!showPassword)}>
-                        <Ionicons name={showPassword ? "eye-off-outline" : "eye-outline"} size={24} color="#a0a0a0" />
-                    </TouchableOpacity>
-                </View>
-                {passwordError ? <Text className="text-red-500 text-sm px-5">{passwordError}</Text> : null}
-            </View>
-
-            {/* Input Xác nhận mật khẩu */}
-            <View className="w-full">
-                <View
-                    className={`flex-row items-center w-full h-12 rounded-full px-4 bg-gray-100 ${
-                        confirmPasswordError ? "border border-red-500" : ""
-                    }`}
-                >
-                    <Ionicons name="lock-closed-outline" size={24} color="#a0a0a0" />
-                    <TextInput
-                        className="flex-1 h-full text-base text-gray-700 ml-2"
-                        placeholder="Nhập lại mật khẩu"
-                        secureTextEntry={!showConfirmPass}
-                        placeholderTextColor="#a0a0a0"
-                        value={confirmPassword}
-                        onChangeText={setConfirmPassword}
-                    />
-                    <TouchableOpacity onPress={() => setShowConfirmPass(!showConfirmPass)}>
-                        <Ionicons
-                            name={showConfirmPass ? "eye-off-outline" : "eye-outline"}
-                            size={24}
-                            color="#a0a0a0"
-                        />
-                    </TouchableOpacity>
-                </View>
-                {confirmPasswordError ? (
-                    <Text className="text-red-500 text-sm px-5">{confirmPasswordError}</Text>
-                ) : null}
-            </View>
-
-            <View className="flex-row items-center mb-8 px-6">
+            {/* Terms and Conditions */}
+            <View className="flex-row items-center mb-7 px-6">
                 <Switch
                     value={isChecked}
                     onValueChange={setIsChecked}
@@ -185,18 +135,20 @@ export default function RegisterPage({ navigation }) {
                 />
                 <Text className="text-gray-800">
                     Tôi đã đọc và đồng ý với <Text className="text-green-600">điều khoản dịch vụ</Text> và{" "}
-                    <Text className="text-green-600">chính sách bảo mật</Text> của qnspJob.
+                    <Text className="text-green-600">chính sách bảo mật</Text> của Job Portal.
                 </Text>
             </View>
 
+            {/* Register Button */}
             <TouchableOpacity
-                className={`w-full rounded-full py-3 mb-9 items-center ${isChecked ? "bg-green-600" : "bg-gray-400"}`}
+                className={`w-full rounded-full py-3 mb-7 items-center ${isChecked ? "bg-green-600" : "bg-gray-400"}`}
                 onPress={handleRegister}
                 disabled={!isChecked}
             >
                 <Text className="text-white text-lg">Đăng ký</Text>
             </TouchableOpacity>
 
+            {/* Navigation Links */}
             <View className="w-full">
                 <View className="items-center mb-3">
                     <Text className="text-gray-800">
@@ -206,9 +158,7 @@ export default function RegisterPage({ navigation }) {
                         </Text>
                     </Text>
                 </View>
-
                 <View className="self-center w-4/5 h-px bg-gray-300 mb-2" />
-
                 <TouchableOpacity onPress={() => navigation.navigate("Home")}>
                     <Text className="self-center text-sm font-bold text-green-600 mb-5">
                         Trải nghiệm không cần đăng nhập
