@@ -1,11 +1,11 @@
 import React from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { Ionicons } from "react-native-vector-icons";
-import HomeTab from "../screens/Home/HomeTab";
-import CV_ProfileTab from "../screens/Home/CV_ProfileTab";
-import JobConnectTab from "../screens/Home/JobConnectTab";
-import NotificationTab from "../screens/Home/NotificationTab";
-import AccountTab from "../screens/Home/AccountTab";
+import HomeTab from "../../screens/Home/HomeTab";
+import CV_ProfileTab from "../../screens/Home/CV_ProfileTab";
+import JobConnectTab from "../../screens/Home/JobConnectTab";
+import NotificationTab from "../../screens/Home/NotificationTab";
+import AccountTab from "../../screens/Home/AccountTab";
 
 const Tab = createBottomTabNavigator();
 

@@ -5,8 +5,8 @@ import AuthNavigator from "./AuthNavigator";
 import AccountNavigator from "./AccountNavigator";
 import JobNavigator from "./JobNavigator";
 import MainTabNavigator from "./MainTabNavigator";
-import Intro from "../screens/intro/Intro";
-import StartPage from "../screens/intro/StartPage";
+import Intro from "../../screens/intro/Intro";
+import StartPage from "../../screens/intro/StartPage";
 import Toast from "react-native-toast-message";
 
 const Stack = createStackNavigator();
