@@ -1,10 +1,44 @@
 import React, { useState } from "react";
-import { ActivityIndicator, StyleSheet, Text, TextInput, View, Alert, TouchableOpacity } from "react-native";
+import { ActivityIndicator, StyleSheet, Text, TextInput, View, TouchableOpacity } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { StatusBar } from "expo-status-bar";
 import Toast from "react-native-toast-message";
 
 import { resetPassword, sendOtp } from "../../services/AuthAPIService";
+
+// Component for Password Field
+const PasswordField = ({ placeholder, value, onChange, secureTextEntry, icon, onToggleShow, errorMessage }) => (
+    <View>
+        <View style={[styles.inputContainer, errorMessage ? styles.inputError : null]}>
+            {icon && <Ionicons name={icon} size={24} color="#a0a0a0" style={styles.icon} />}
+            <TextInput
+                style={styles.input}
+                placeholder={placeholder}
+                secureTextEntry={secureTextEntry}
+                placeholderTextColor="#a0a0a0"
+                value={value}
+                onChangeText={onChange}
+            />
+            {onToggleShow && (
+                <TouchableOpacity onPress={onToggleShow}>
+                    <Ionicons name={secureTextEntry ? "eye-off-outline" : "eye-outline"} size={24} color="#a0a0a0" />
+                </TouchableOpacity>
+            )}
+        </View>
+        {errorMessage ? <Text style={styles.errorText}>{errorMessage}</Text> : null}
+    </View>
+);
+
+// Component for Loading Indicator
+const LoadingIndicator = ({ loading }) => {
+    if (!loading) return null;
+
+    return (
+        <View style={styles.loadingContainer}>
+            <ActivityIndicator size="large" color="#6dcf5b" />
+        </View>
+    );
+};
 
 export default function ResetPassWordPage({ navigation, route }) {
     const { email } = route.params;
@@ -15,6 +49,7 @@ export default function ResetPassWordPage({ navigation, route }) {
     const [confirmPassword, setConfirmPassword] = useState("");
     const [showPassword, setShowPassword] = useState(false);
     const [showConfirmPass, setShowConfirmPass] = useState(false);
+    const [errors, setErrors] = useState({ otp: "", newPassword: "", confirmPassword: "" });
 
     const showToast = (type, text1, text2) => {
         Toast.show({
@@ -29,103 +64,73 @@ export default function ResetPassWordPage({ navigation, route }) {
         });
     };
 
+    const handleInputChange = (field, setValue) => (value) => {
+        setValue(value);
+        if (errors[field]) {
+            setErrors((prev) => ({ ...prev, [field]: "" }));
+        }
+    };
+
     const handleSendOtp = async () => {
         setLoading(true);
-
         try {
             const data = await sendOtp(email);
-
-            if (data.success) {
-                showToast("success", "Success", data.message);
-            } else {
-                showToast("error", "Error", data.message);
-            }
+            showToast(data.success ? "success" : "error", data.success ? "Success" : "Error", data.message);
         } catch (error) {
-            Alert.alert("Error", "An error occurred. Please try again.");
+            showToast("error", "Error", "An error occurred. Please try again.");
         } finally {
             setLoading(false);
         }
     };
 
     const handleResetPassword = async () => {
-        if (!newPassword || !confirmPassword) {
-            Alert.alert("Lỗi", "Vui lòng điền đầy đủ thông tin");
-            return;
+        setErrors({ otp: "", newPassword: "", confirmPassword: "" });
+        let hasError = false;
+
+        // Validate input fields
+        if (!otp) {
+            setErrors((prev) => ({ ...prev, otp: "Vui lòng nhập mã xác nhận" }));
+            hasError = true;
+        }
+        if (!newPassword) {
+            setErrors((prev) => ({ ...prev, newPassword: "Vui lòng nhập mật khẩu mới" }));
+            hasError = true;
+        }
+        if (newPassword !== confirmPassword) {
+            setErrors((prev) => ({ ...prev, confirmPassword: "Mật khẩu không trùng khớp" }));
+            hasError = true;
         }
 
-        if (newPassword !== confirmPassword) {
-            Alert.alert("Lỗi", "Mật khẩu không trùng khớp");
-            return;
-        }
+        if (hasError) return;
+
         try {
             const data = await resetPassword(email, newPassword, otp);
-
-            if (data.success) {
-                showToast("success", "Success", data.message);
-                navigation.navigate("Login");
-            } else {
-                showToast("error", "Error", data.message);
-            }
+            showToast(data.success ? "success" : "error", data.success ? "Success" : "Error", data.message);
+            if (data.success) navigation.navigate("Login");
         } catch (error) {
-            Alert.alert("Lỗi", "Đã xảy ra lỗi. Hãy thử lại.");
+            showToast("error", "Lỗi", "Đã xảy ra lỗi. Hãy thử lại.");
         }
     };
 
     return (
         <View style={styles.container}>
             <StatusBar style="auto" />
-
-            {loading && (
-                <View
-                    style={{
-                        position: "absolute",
-                        top: 0,
-                        left: 0,
-                        right: 0,
-                        bottom: 0,
-                        backgroundColor: "rgba(0, 0, 0, 0.1)", // Làm mờ phần nền xung quanh một chút
-                        justifyContent: "center",
-                        alignItems: "center",
-                        zIndex: 10,
-                    }}
-                >
-                    {/* Hình vuông chứa ActivityIndicator */}
-                    <View
-                        style={{
-                            width: 68, // Kích thước của hình vuông
-                            height: 68,
-                            backgroundColor: "#fff", // Màu nền trắng cho hình vuông
-                            borderRadius: 10, // Bo góc cho hình vuông
-                            justifyContent: "center",
-                            alignItems: "center",
-                            shadowColor: "#000",
-                            shadowOffset: { width: 0, height: 2 },
-                            shadowOpacity: 0.8,
-                            shadowRadius: 2,
-                            elevation: 5, // Hiệu ứng đổ bóng cho Android
-                        }}
-                    >
-                        <ActivityIndicator size="large" color="#6dcf5b" />
-                    </View>
-                </View>
-            )}
-
+            <LoadingIndicator loading={loading} />
             <View>
                 <Text style={styles.title}>Đặt lại mật khẩu</Text>
                 <Text style={styles.description}>
                     Chúng tôi đã gửi mã xác nhận tới địa chỉ <Text style={styles.bold}>{email}</Text>. Vui lòng kiểm tra
                     hòm thư hoặc hòm thư spam để lấy mã và nhập vào bên dưới
                 </Text>
-
                 <Text>
                     Mã xác nhận <Text style={{ color: "red" }}>*</Text>
                 </Text>
-                <View style={styles.inputContainer}>
+                <View style={[styles.inputContainer, errors.otp ? styles.inputError : null]}>
                     <TextInput
                         style={styles.input}
                         placeholder="Nhập mã xác nhận"
                         value={otp}
-                        onChangeText={setOtp}
+                        onChangeText={handleInputChange("otp", setOtp)}
                         keyboardType="numeric"
                         maxLength={6}
                     />
@@ -133,47 +138,30 @@ export default function ResetPassWordPage({ navigation, route }) {
                         <Text style={styles.resendButtonText}>Gửi lại mã</Text>
                     </TouchableOpacity>
                 </View>
+                {errors.otp ? <Text style={styles.errorText}>{errors.otp}</Text> : null}
 
                 <Text>
                     Mật khẩu mới <Text style={{ color: "red" }}>*</Text>
                 </Text>
-                <View style={styles.inputContainer}>
-                    <Ionicons name="lock-closed-outline" size={24} color="#a0a0a0" style={styles.icon} />
-                    <TextInput
-                        style={styles.input}
-                        placeholder="Mật khẩu mới"
-                        secureTextEntry={!showPassword}
-                        placeholderTextColor="#a0a0a0"
-                        value={newPassword}
-                        onChangeText={setNewPassword}
-                    />
-                    <TouchableOpacity onPress={() => setShowPassword(!showPassword)}>
-                        <Ionicons name={showPassword ? "eye-off-outline" : "eye-outline"} size={24} color="#a0a0a0" />
-                    </TouchableOpacity>
-                </View>
-
-                <View style={styles.inputContainer}>
-                    <Ionicons name="lock-closed-outline" size={24} color="#a0a0a0" style={styles.icon} />
-                    <TextInput
-                        style={styles.input}
-                        placeholder="Nhập lại mật khẩu"
-                        secureTextEntry={!showConfirmPass}
-                        placeholderTextColor="#a0a0a0"
-                        value={confirmPassword}
-                        onChangeText={setConfirmPassword}
-                    />
-                    <TouchableOpacity onPress={() => setShowConfirmPass(!showConfirmPass)}>
-                        <Ionicons
-                            name={showConfirmPass ? "eye-off-outline" : "eye-outline"}
-                            size={24}
-                            color="#a0a0a0"
-                        />
-                    </TouchableOpacity>
-                </View>
-
-                <View>
-                    <Text style={styles.noteText}>Mã xác nhận hết hạn sau 5 phút kể từ khi bạn nhận được mã.</Text>
-                </View>
+                <PasswordField
+                    placeholder="Mật khẩu mới"
+                    value={newPassword}
+                    onChange={handleInputChange("newPassword", setNewPassword)}
+                    secureTextEntry={!showPassword}
+                    icon="lock-closed-outline"
+                    onToggleShow={() => setShowPassword(!showPassword)}
+                    errorMessage={errors.newPassword}
+                />
+                <PasswordField
+                    placeholder="Nhập lại mật khẩu"
+                    value={confirmPassword}
+                    onChange={handleInputChange("confirmPassword", setConfirmPassword)}
+                    secureTextEntry={!showConfirmPass}
+                    icon="lock-closed-outline"
+                    onToggleShow={() => setShowConfirmPass(!showConfirmPass)}
+                    errorMessage={errors.confirmPassword}
+                />
+                <Text style={styles.noteText}>Mã xác nhận hết hạn sau 5 phút kể từ khi bạn nhận được mã.</Text>
             </View>
             <TouchableOpacity style={styles.button} onPress={handleResetPassword}>
                 <Text style={styles.buttonText}>Cập nhật mật khẩu</Text>
@@ -212,6 +200,10 @@ const styles = StyleSheet.create({
         paddingHorizontal: 15,
         backgroundColor: "#f9f9f9",
     },
+    inputError: {
+        borderColor: "red",
+        borderWidth: 1,
+    },
     icon: {
         marginRight: 10,
     },
@@ -221,7 +213,7 @@ const styles = StyleSheet.create({
         fontSize: 16,
     },
     resendButton: {
-        backgroundColor: "#509b43",
+        backgroundColor: "#16a34a",
         borderRadius: 5,
         paddingVertical: 8,
         paddingHorizontal: 12,
@@ -231,13 +223,8 @@ const styles = StyleSheet.create({
         color: "#ffffff",
         fontSize: 14,
     },
-    errorText: {
-        color: "red",
-        marginBottom: 16,
-        fontSize: 14,
-    },
     button: {
-        backgroundColor: "#509b43",
+        backgroundColor: "#16a34a",
         width: "100%",
         borderRadius: 5,
         paddingVertical: 12,
@@ -251,10 +238,26 @@ const styles = StyleSheet.create({
     },
     bold: {
         fontWeight: "bold",
-        color: "#509b43",
+        color: "#16a34a",
     },
     noteText: {
         color: "#a0a0a0",
         textAlign: "center",
+    },
+    loadingContainer: {
+        position: "absolute",
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        backgroundColor: "rgba(0, 0, 0, 0.1)",
+        justifyContent: "center",
+        alignItems: "center",
+        zIndex: 10,
+    },
+    errorText: {
+        color: "red",
+        marginBottom: 8,
+        fontSize: 14,
     },
 });
